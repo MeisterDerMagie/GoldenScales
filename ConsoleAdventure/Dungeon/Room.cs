@@ -4,67 +4,55 @@ using System.Numerics;
 namespace ConsoleAdventure;
 public class Room
 {
-    public string name;
-    public Vector2 position;
-    private HashSet<Door> linkedDoors; //all linked doors, regardless of if they are directional or non-directional
-    private HashSet<Room> linkedRooms; //all linked rooms, regardless of if they are connected with directional or non-directional doors
+    public string Name;
+    public RoomPosition Position;
+    private readonly HashSet<Door> linkedDoors; //all linked doors, regardless of if they are directional or non-directional
+    private readonly HashSet<Room> linkedRooms; //all linked rooms, regardless of if they are connected with directional or non-directional doors
     
     /// <summary> All out-doors. Does not include "incoming" directed doors. </summary>
-    public HashSet<Door> outDoors;
+    public readonly HashSet<Door> OutDoors;
     
     /// <summary>All rooms that can be travelled to from this room. Takes directional doors into consideration. </summary>
-    public HashSet<Room> outRooms;
+    public readonly HashSet<Room> OutRooms;
 
     //Constructor
-    public Room(string _name, Vector2 _position)
+    public Room(string name, RoomPosition position)
     {
-        name = _name;
-        position = _position;
+        Name = name;
+        Position = position;
         linkedDoors = new HashSet<Door>();
         linkedRooms = new HashSet<Room>();
-        outDoors = new HashSet<Door>();
-        outRooms = new HashSet<Room>();
+        OutDoors = new HashSet<Door>();
+        OutRooms = new HashSet<Room>();
     }
 
     //if a new door got added, we need to also reference it inside the linked rooms
-    public void RegisterDoor(Door _door)
+    public void RegisterDoor(Door door)
     {
-        if (!_door.IncludesRoom(this))
+        if (!door.IncludesRoom(this))
         {
-            Console.WriteLine($"Can't register the door {_door.ToString()} because it's not linked to this room {this.ToString()}!");
+            Console.WriteLine($"Can't register the door {door.ToString()} because it's not linked to this room {this.ToString()}!");
             return;
         }
         
-        linkedDoors.Add(_door);
+        linkedDoors.Add(door);
         Update();
     }
 
     //if an door got delted, we need to also remove the reference from the lists in this room
-    public void UnregisterDoor(Door _door)
+    public void UnregisterDoor(Door door)
     {
-        if (!_door.IncludesRoom(this))
+        if (!door.IncludesRoom(this))
         {
-            Console.WriteLine($"Can't unregister the door {_door.ToString()} because it's not linked to this room {this.ToString()}!");
+            Console.WriteLine($"Can't unregister the door {door.ToString()} because it's not linked to this room {this.ToString()}!");
             return;
         }
 
-        linkedDoors.Remove(_door);
+        linkedDoors.Remove(door);
         
         Update();
     }
 
-    public void SetPosition(Vector2 _newPos)
-    {
-        //change the position of this room
-        position = _newPos;
-
-        //let all doors that are linked to this room know about the position change, so they can update the weight (distance) accordingly
-        foreach (Door door in linkedDoors)
-        {
-            door.UpdateWeight();
-        }
-    }
-    
     //Update the linked rooms, out-doors and out-rooms
     private void Update()
     {
@@ -76,56 +64,56 @@ public class Room
         foreach (Door door in linkedDoors)
         {
             //if this room is the source of an door ...
-            if(door.source == this)
+            if(door.Source == this)
                 //... add the target to the linked rooms
-                linkedRooms.Add(door.target);
+                linkedRooms.Add(door.Target);
             
             //if this room is the target of an door ...
-            else if(door.target == this)
+            else if(door.Target == this)
                 //... add the source to the linked rooms
-                linkedRooms.Add(door.source);
+                linkedRooms.Add(door.Source);
         }
         
         //-- Refresh all connected doors --
         //clean up
-        outDoors.Clear();
+        OutDoors.Clear();
         
         //iterate over all doors that are linked to this room...
         foreach (Door door in linkedDoors)
         {
             //if this room is the target of an door...
-            if(door.target == this)
+            if(door.Target == this)
                 //... and if the door is directed ...
-                if(door.isDirected)
+                if(door.IsDirected)
                     //... don't add it to the connected doors list
                     continue;
             
             //otherwise add the door
-            outDoors.Add(door);
+            OutDoors.Add(door);
         }
         
         //-- Refresh all connected rooms --
         //clean up
-        outRooms.Clear();
+        OutRooms.Clear();
         
         //iterate over all doors that are linked to this room...
         foreach (Door door in linkedDoors)
         {
             //if this room is the source of an door, we can travel to the target room, so add it to the connected rooms list
-            if (door.source == this)
-                outRooms.Add(door.target);
+            if (door.Source == this)
+                OutRooms.Add(door.Target);
             
             //if this room is not the source, but the target ...
-            else if(door.target == this)
+            else if(door.Target == this)
                 //and the door is not directed ...
-                if (!door.isDirected)
+                if (!door.IsDirected)
                     //we can travel to the source room, so add it to the connected rooms list
-                    outRooms.Add(door.source);
+                    OutRooms.Add(door.Source);
         }
     }
 
     public override string ToString()
     {
-        return name;
+        return Name;
     }
 }

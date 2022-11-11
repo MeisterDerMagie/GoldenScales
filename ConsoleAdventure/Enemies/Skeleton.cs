@@ -4,7 +4,7 @@ namespace ConsoleAdventure.Enemies;
 
 public class Skeleton : Enemy
 {
-    public Skeleton() : base("Skeleton", Constants.SKELETON_MAX_HEALTH) { }
+    public Skeleton() : base("Skeleton", Constants.SkeletonMaxHealth) { }
     
     protected override void Die()
     {

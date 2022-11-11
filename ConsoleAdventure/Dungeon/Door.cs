@@ -4,26 +4,26 @@ using System.Numerics;
 namespace ConsoleAdventure;
 public class Door
 {
-    public bool isDirected;
-    public Room source, target;
-    public float weight;
+    public bool IsDirected;
+    public readonly Room Source, Target;
+    //public float Weight;
 
-    public Door(Room _source, Room _target, bool _isDirected = false)
+    public Door(Room source, Room target, bool isDirected = false)
     {
-        isDirected = _isDirected;
-        source = _source;
-        target = _target;
-        UpdateWeight();
+        IsDirected = isDirected;
+        Source = source;
+        Target = target;
+        //UpdateWeight();
     }
     
-    public bool IncludesRoom(Room _room) => (source == _room || target == _room);
-    public bool IsLoop() => (source == target);
+    public bool IncludesRoom(Room room) => (Source == room || Target == room);
+    public bool IsLoop() => (Source == Target);
     
-    public void UpdateWeight() => weight = Vector2.Distance(source.position, target.position);
+    //public void UpdateWeight() => Weight = Vector2.Distance(Source.Position, Target.Position);
 
     public override string ToString()
     {
-        string output = isDirected ? $"({source.ToString()}, {target.ToString()})" : $"{{{source.ToString()}, {target.ToString()}}}";
+        string output = IsDirected ? $"({Source.ToString()}, {Target.ToString()})" : $"{{{Source.ToString()}, {Target.ToString()}}}";
         return output;
     }
 }

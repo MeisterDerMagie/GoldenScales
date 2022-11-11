@@ -4,67 +4,67 @@ using System.Globalization;
 namespace ConsoleAdventure;
 public class Graph
 {
-    public List<Vertex> vertices;
-    public List<Edge> edges;
+    public List<Vertex> Vertices;
+    public List<Edge> Edges;
 
     //Constructor
     public Graph()
     {
-        vertices = new List<Vertex>();
-        edges = new List<Edge>();
+        Vertices = new List<Vertex>();
+        Edges = new List<Edge>();
     }
     
-    public void AddVertex(Vertex _vertex)
+    public void AddVertex(Vertex vertex)
     {
         //add new vertex to the graph
-        vertices.Add(_vertex);
+        Vertices.Add(vertex);
     }
 
-    public void AddEdge(Edge _edge)
+    public void AddEdge(Edge edge)
     {
         //add edge to the graph
-        edges.Add(_edge);
+        Edges.Add(edge);
         
         //let the source vertex know of the edge
-        _edge.source.RegisterEdge(_edge);
+        edge.Source.RegisterEdge(edge);
         
         //let the target vertex know of the edge
-        _edge.target.RegisterEdge(_edge);
+        edge.Target.RegisterEdge(edge);
     }
 
-    public void RemoveVertex(Vertex _vertex)
+    public void RemoveVertex(Vertex vertex)
     {
         //if the vertex is not part of the graph...
-        if (!vertices.Contains(_vertex))
+        if (!Vertices.Contains(vertex))
         {
             //let the user know and don't do anything
-            Console.WriteLine($"Can't remove vertex \"{_vertex.ToString()}\" because it's not part of this graph!");
+            Console.WriteLine($"Can't remove vertex \"{vertex.ToString()}\" because it's not part of this graph!");
             return;
         }
 
         //iterate backwards over all edges of the graph...
-        for (int i = edges.Count - 1; i >= 0; i--)
+        for (int i = Edges.Count - 1; i >= 0; i--)
         {
             //... and if the edge is linked to the vertex we want to delete...
-            if(edges[i].IncludesVertex(_vertex))
+            if(Edges[i].IncludesVertex(vertex))
                 //... also delete the edge.
-                RemoveEdge(edges[i]);
+                RemoveEdge(Edges[i]);
         }
 
         //finally remove the vertex from the graph
-        vertices.Remove(_vertex);
+        Vertices.Remove(vertex);
     }
 
-    public void RemoveEdge(Edge _edge)
+    public void RemoveEdge(Edge edge)
     {
         //let the source vertex know that this edge will be removed
-        _edge.source.UnregisterEdge(_edge);
+        edge.Source.UnregisterEdge(edge);
         
         //let the target vertex know that this edge will be removed
-        _edge.target.UnregisterEdge(_edge);
+        edge.Target.UnregisterEdge(edge);
 
         //remove the edge from the graph
-        edges.Remove(_edge);
+        Edges.Remove(edge);
     }
 
     public override string ToString()
@@ -74,10 +74,10 @@ public class Graph
         //format vertices - format: V = {a, b, c}
         output += "V = {";
 
-        for (int i = 0; i < vertices.Count; i++)
+        for (int i = 0; i < Vertices.Count; i++)
         {
-            output += vertices[i].ToString();
-            if (i < vertices.Count - 1) output += ", ";
+            output += Vertices[i].ToString();
+            if (i < Vertices.Count - 1) output += ", ";
         }
 
         output += "}\n";
@@ -85,10 +85,10 @@ public class Graph
         //format edges - format: E = {(a, b), {a, c}, (c, b)}   (round braces for directed, curly braces for non-directed edges)
         output += "E = {";
 
-        for (int i = 0; i < edges.Count; i++)
+        for (int i = 0; i < Edges.Count; i++)
         {
-            output += edges[i].ToString();
-            if (i < edges.Count - 1) output += ", ";
+            output += Edges[i].ToString();
+            if (i < Edges.Count - 1) output += ", ";
         }
 
         output += "}\n";
@@ -96,15 +96,15 @@ public class Graph
         //format weights - format: W = {{(a, b), 0.5}, {{a, c}, 0.33}}
         output += "W = {";
 
-        for (int i = 0; i < edges.Count; i++)
+        for (int i = 0; i < Edges.Count; i++)
         {
             output += "{";
-            output += edges[i].ToString();
+            output += Edges[i].ToString();
             output += ", ";
-            output += Math.Round(edges[i].weight, 1).ToString(CultureInfo.InvariantCulture);
+            output += Math.Round(Edges[i].Weight, 1).ToString(CultureInfo.InvariantCulture);
             output += "}";
             
-            if (i < edges.Count - 1) output += ", ";
+            if (i < Edges.Count - 1) output += ", ";
         }
 
         output += "}\n";

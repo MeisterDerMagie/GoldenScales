@@ -4,11 +4,11 @@ namespace ConsoleAdventure.ConsoleUtilities;
 
 public static class ConsoleUtilities
 {
-    private static bool InputBoolean(string _question)
+    private static bool InputBoolean(string question)
     {
         while (true)
         {
-            Console.Write(_question);
+            Console.Write(question);
             Console.Write(" [yes/no]? ");
 
             string userInput = Console.ReadLine();
@@ -32,11 +32,11 @@ public static class ConsoleUtilities
         }
     }
 
-    private static string InputString(string _question)
+    private static string InputString(string question)
     {
         while (true)
         {
-            Console.Write(_question);
+            Console.Write(question);
             Console.Write(" ");
 
             string userInput = Console.ReadLine();
@@ -48,11 +48,11 @@ public static class ConsoleUtilities
         }
     }
 
-    private static int InputInteger(string _question, bool _positiveOnly = true, bool _allowZero = true)
+    private static int InputInteger(string question, bool positiveOnly = true, bool allowZero = true)
     {
         while (true)
         {
-            Console.Write(_question);
+            Console.Write(question);
 
             string userInput = Console.ReadLine();
 
@@ -67,7 +67,7 @@ public static class ConsoleUtilities
 
             if (ret == 0)
             {
-                if (_allowZero)
+                if (allowZero)
                 {
                     return 0;
                 }
@@ -80,7 +80,7 @@ public static class ConsoleUtilities
 
             if (ret < 0)
             {
-                if (_positiveOnly)
+                if (positiveOnly)
                 {
                     Console.WriteLine("Please enter a positive value.");
                     continue;

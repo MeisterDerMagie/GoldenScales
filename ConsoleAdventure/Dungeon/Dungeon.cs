@@ -4,67 +4,67 @@ using System.Globalization;
 namespace ConsoleAdventure;
 public class Dungeon
 {
-    public List<Room> rooms;
-    public List<Door> doors;
+    public List<Room> Rooms;
+    public List<Door> Doors;
 
     //Constructor
     public Dungeon()
     {
-        rooms = new List<Room>();
-        doors = new List<Door>();
+        Rooms = new List<Room>();
+        Doors = new List<Door>();
     }
     
-    public void AddRoom(Room _room)
+    public void AddRoom(Room room)
     {
         //add new room to the graph
-        rooms.Add(_room);
+        Rooms.Add(room);
     }
 
-    public void AddDoor(Door _door)
+    public void AddDoor(Door door)
     {
         //add door to the graph
-        doors.Add(_door);
+        Doors.Add(door);
         
         //let the source room know of the door
-        _door.source.RegisterDoor(_door);
+        door.Source.RegisterDoor(door);
         
         //let the target room know of the door
-        _door.target.RegisterDoor(_door);
+        door.Target.RegisterDoor(door);
     }
 
-    public void RemoveRoom(Room _room)
+    public void RemoveRoom(Room room)
     {
         //if the room is not part of the graph...
-        if (!rooms.Contains(_room))
+        if (!Rooms.Contains(room))
         {
             //let the user know and don't do anything
-            Console.WriteLine($"Can't remove room \"{_room.ToString()}\" because it's not part of this graph!");
+            Console.WriteLine($"Can't remove room \"{room.ToString()}\" because it's not part of this graph!");
             return;
         }
 
         //iterate backwards over all doors of the graph...
-        for (int i = doors.Count - 1; i >= 0; i--)
+        for (int i = Doors.Count - 1; i >= 0; i--)
         {
             //... and if the door is linked to the room we want to delete...
-            if(doors[i].IncludesRoom(_room))
+            if(Doors[i].IncludesRoom(room))
                 //... also delete the door.
-                RemoveDoor(doors[i]);
+                RemoveDoor(Doors[i]);
         }
 
         //finally remove the room from the graph
-        rooms.Remove(_room);
+        Rooms.Remove(room);
     }
 
-    public void RemoveDoor(Door _door)
+    public void RemoveDoor(Door door)
     {
         //let the source room know that this door will be removed
-        _door.source.UnregisterDoor(_door);
+        door.Source.UnregisterDoor(door);
         
         //let the target room know that this door will be removed
-        _door.target.UnregisterDoor(_door);
+        door.Target.UnregisterDoor(door);
 
         //remove the door from the graph
-        doors.Remove(_door);
+        Doors.Remove(door);
     }
 
     public override string ToString()
@@ -74,10 +74,10 @@ public class Dungeon
         //format rooms - format: V = {a, b, c}
         output += "V = {";
 
-        for (int i = 0; i < rooms.Count; i++)
+        for (int i = 0; i < Rooms.Count; i++)
         {
-            output += rooms[i].ToString();
-            if (i < rooms.Count - 1) output += ", ";
+            output += Rooms[i].ToString();
+            if (i < Rooms.Count - 1) output += ", ";
         }
 
         output += "}\n";
@@ -85,10 +85,10 @@ public class Dungeon
         //format doors - format: E = {(a, b), {a, c}, (c, b)}   (round braces for directed, curly braces for non-directed doors)
         output += "E = {";
 
-        for (int i = 0; i < doors.Count; i++)
+        for (int i = 0; i < Doors.Count; i++)
         {
-            output += doors[i].ToString();
-            if (i < doors.Count - 1) output += ", ";
+            output += Doors[i].ToString();
+            if (i < Doors.Count - 1) output += ", ";
         }
 
         output += "}\n";
@@ -96,15 +96,15 @@ public class Dungeon
         //format weights - format: W = {{(a, b), 0.5}, {{a, c}, 0.33}}
         output += "W = {";
 
-        for (int i = 0; i < doors.Count; i++)
+        for (int i = 0; i < Doors.Count; i++)
         {
             output += "{";
-            output += doors[i].ToString();
+            output += Doors[i].ToString();
             output += ", ";
-            output += Math.Round(doors[i].weight, 1).ToString(CultureInfo.InvariantCulture);
+            //output += Math.Round(Doors[i].Weight, 1).ToString(CultureInfo.InvariantCulture);
             output += "}";
             
-            if (i < doors.Count - 1) output += ", ";
+            if (i < Doors.Count - 1) output += ", ";
         }
 
         output += "}\n";

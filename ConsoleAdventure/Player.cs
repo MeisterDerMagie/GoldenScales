@@ -10,22 +10,22 @@ public class Player : IDamageable
     public int Health { get; private set; }
 
 
-    public Player(string _name, int _maxHealth)
+    public Player(string name, int maxHealth)
     {
-        Name = _name;
-        MaxHealth = _maxHealth;
-        Health = _maxHealth;
+        Name = name;
+        MaxHealth = maxHealth;
+        Health = maxHealth;
     }
     
-    public void DealDamage(int _amount)
+    public void DealDamage(int amount)
     {
-        Health -= _amount;
+        Health -= amount;
         CheckForDeath();
     }
 
-    public void Heal(int _amount)
+    public void Heal(int amount)
     {
-        Health += _amount;
+        Health += amount;
         if (Health > MaxHealth) Health = MaxHealth;
     }
 

@@ -2,8 +2,8 @@
 
 namespace ConsoleAdventure;
 
-public class NPC
+public class Npc
 {
-    public string name;
-    public DialogNode dialog;
+    public string Name;
+    public DialogNode Dialog;
 }

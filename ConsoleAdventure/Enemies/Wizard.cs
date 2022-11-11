@@ -4,7 +4,7 @@ namespace ConsoleAdventure.Enemies;
 
 public class Wizard : Enemy
 {
-    public Wizard() : base("Wizard", Constants.WIZARD_MAX_HEALTH) { }
+    public Wizard() : base("Wizard", Constants.WizardMaxHealth) { }
     
     protected override void Die()
     {

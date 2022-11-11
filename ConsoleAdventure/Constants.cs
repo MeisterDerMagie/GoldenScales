@@ -5,9 +5,18 @@ namespace ConsoleAdventure;
 public static class Constants
 {
     #region Enemies
-
-    public const int SKELETON_MAX_HEALTH = 80;
-    public const int WIZARD_MAX_HEALTH = 45;
-
+    public const int SkeletonMaxHealth = 80;
+    public const int WizardMaxHealth = 45;
+    #endregion
+    
+    #region Map
+    public const string MapPlayerPosition = "X";
+    public const string MapRoom = "O";
+    public const string MapRoomTrader = "$";
+    public const string MapRoomNone = " ";
+    public const string MapDoorHorizontal = "--";
+    public const string MapDoorHorizontalNone = "  ";
+    public const string MapDoorVertical = "|";
+    public const string MapDoorVerticalNone = " ";
     #endregion
 }

@@ -12,12 +12,12 @@ public class DialogNode
     
     public string DialogText { get; private set; }
 
-    public DialogNode(DialogNode _parent, DialogNode[] _children, string _keyword, string _dialogText)
+    public DialogNode(DialogNode parent, DialogNode[] children, string keyword, string dialogText)
     {
-        Parent = _parent;
-        Children = _children;
-        Keyword = _keyword;
-        DialogText = _dialogText;
+        Parent = parent;
+        Children = children;
+        Keyword = keyword;
+        DialogText = dialogText;
     }
     
     public override string ToString() => DialogText;

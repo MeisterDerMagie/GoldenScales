@@ -4,26 +4,26 @@ using System.Numerics;
 namespace ConsoleAdventure;
 public class Edge
 {
-    public bool isDirected;
-    public Vertex source, target;
-    public float weight;
+    public bool IsDirected;
+    public Vertex Source, Target;
+    public float Weight;
 
-    public Edge(Vertex _source, Vertex _target, bool _isDirected = false)
+    public Edge(Vertex source, Vertex target, bool isDirected = false)
     {
-        isDirected = _isDirected;
-        source = _source;
-        target = _target;
+        IsDirected = isDirected;
+        Source = source;
+        Target = target;
         UpdateWeight();
     }
     
-    public bool IncludesVertex(Vertex _vertex) => (source == _vertex || target == _vertex);
-    public bool IsLoop() => (source == target);
+    public bool IncludesVertex(Vertex vertex) => (Source == vertex || Target == vertex);
+    public bool IsLoop() => (Source == Target);
     
-    public void UpdateWeight() => weight = Vector2.Distance(source.position, target.position);
+    public void UpdateWeight() => Weight = Vector2.Distance(Source.Position, Target.Position);
 
     public override string ToString()
     {
-        string output = isDirected ? $"({source.ToString()}, {target.ToString()})" : $"{{{source.ToString()}, {target.ToString()}}}";
+        string output = IsDirected ? $"({Source.ToString()}, {Target.ToString()})" : $"{{{Source.ToString()}, {Target.ToString()}}}";
         return output;
     }
 }

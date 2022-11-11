@@ -11,22 +11,22 @@ public abstract class Enemy : IDamageable
 
     public event Action OnEnemyDied;
 
-    public Enemy(string _name, int _maxHealth)
+    public Enemy(string name, int maxHealth)
     {
-        Name = _name;
-        MaxHealth = _maxHealth;
-        Health = _maxHealth;
+        Name = name;
+        MaxHealth = maxHealth;
+        Health = maxHealth;
     }
     
-    public void DealDamage(int _amount)
+    public void DealDamage(int amount)
     {
-        Health -= _amount;
+        Health -= amount;
         CheckForDeath();
     }
 
-    public void Heal(int _amount)
+    public void Heal(int amount)
     {
-        Health += _amount;
+        Health += amount;
         if (Health > MaxHealth) Health = MaxHealth;
     }
 
