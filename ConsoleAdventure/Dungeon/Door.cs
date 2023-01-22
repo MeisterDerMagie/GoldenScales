@@ -6,6 +6,7 @@ public class Door
 {
     public readonly Room Source, Target;
     public bool IsLocked;
+    public bool Discovered;
 
     public Door(Room source, Room target, bool isLocked)
     {

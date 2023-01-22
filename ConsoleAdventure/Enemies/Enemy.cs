@@ -7,7 +7,18 @@ public abstract class Enemy : IDamageable
     public string Name { get; private set; }
     
     public int MaxHealth { get; private set; }
-    public int Health { get; private set; }
+    public int Health
+    {
+        get => _health;
+        private set
+        {
+            if (value < 0) value = 0;
+            else if (value > MaxHealth) value = MaxHealth;
+            _health = value;
+        }
+    }
+
+    private int _health;
 
     public event Action OnEnemyDied;
 
@@ -26,8 +37,19 @@ public abstract class Enemy : IDamageable
 
     public void Heal(int amount)
     {
-        Health += amount;
-        if (Health > MaxHealth) Health = MaxHealth;
+        if(Health + amount >= MaxHealth)
+            HealFully();
+        else
+        {
+            Health += amount;
+            Console.WriteLine($"The {Name} heals for {amount} and is back to {Health} hitpoints.");
+        }
+    }
+
+    public void HealFully()
+    {
+        Health = MaxHealth;
+        Console.WriteLine($"The {Name} heals all their wounds and is back to full strength. Oh oh, that's not good for you!");
     }
 
     private void CheckForDeath()

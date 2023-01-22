@@ -7,6 +7,9 @@ public class Dungeon
     public List<Room> Rooms;
     public List<Door> Doors;
 
+    public Room StartingRoom;
+    public Room BossRoom;
+
     //Constructor
     public Dungeon()
     {

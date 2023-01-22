@@ -1,5 +1,7 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using System.Diagnostics.Contracts;
+
 namespace ConsoleAdventure.Utilities;
 
 public static class RandomUtilities
@@ -23,6 +25,7 @@ public static class RandomUtilities
         return random < probabilityOfSuccess;
     }
 
+    [Pure]
     public static int RandomInt(int min, int max)
     {
         return rng.Next(min, max);
@@ -35,30 +38,38 @@ public static class RandomUtilities
 
         return dungeon.Rooms[randomIndex];
     }
-
-    //https://jonlabelle.com/snippets/view/csharp/pick-random-elements-based-on-probability
-    public static Direction RandomDirection(float probabilityNorth, float probabilityEast, float probabilitySouth, float probabilityWest)
+    
+    //-- Random element with probability --
+    public static T RandomElement<T>(List<ElementProbability<T>> elementsProbabilities)
     {
-        float sum = probabilityNorth + probabilityEast + probabilitySouth + probabilityWest;
-        if (Math.Abs(sum - 1f) > 0.0001)
-            throw new Exception($"The probability of all directions needs to add up to exactly 1.0! It was {sum}.");
-        
-        float random = (float)rng.NextDouble();
-        
-        var probabilities = new List<(Direction direction, float probability)>() { (Direction.North, probabilityNorth), (Direction.East, probabilityEast), (Direction.South, probabilitySouth), (Direction.West, probabilityWest) };
-        probabilities = probabilities.OrderBy(t => t.probability).ToList();
-
-        float cumulative = 0f;
-        
-        for (int i = 0; i < probabilities.Count; i++)
+        //ensure that the total probability of all elements is 1.0
+        float sum = 0f;
+        foreach (ElementProbability<T> element in elementsProbabilities)
         {
-            cumulative += probabilities[i].probability;
-            if (!(random <= cumulative)) continue;
-            
-            return probabilities[i].direction;
+            sum += element.Probability;
         }
         
-        throw new Exception($"Could not pick a random direction. Something went wrong. Random number was {random}");
+        if (Math.Abs(sum - 1f) > 0.0001)
+            throw new Exception($"The probability of all elements needs to add up to exactly 1.0! It was {sum}.");
+        
+        //random number between 0.0 and 1.0
+        float random = (float)rng.NextDouble();
+
+        //order elements
+        elementsProbabilities = elementsProbabilities.OrderBy(element => element.Probability).ToList();
+        
+        //pick random element
+        float cumulative = 0f;
+        foreach (ElementProbability<T> element in elementsProbabilities)
+        {
+            cumulative += element.Probability;
+            if (!(random <= cumulative)) continue;
+            
+            return element.Element;
+        }
+        
+        //if we land here, something went wrong
+        throw new Exception($"Could not pick a random element. Something went wrong. Random number was {random}");
     }
 
     public static void Shuffle<T>(this IList<T> list)  
@@ -69,5 +80,20 @@ public static class RandomUtilities
             int k = rng.Next(n + 1);  
             (list[k], list[n]) = (list[n], list[k]);
         }  
+    }
+}
+
+public class ElementProbability<T>
+{
+    public T Element { get; }
+    public float Probability { get; }
+
+    public ElementProbability(T element, float probability)
+    {
+        if (probability is < 0f or > 1f)
+            throw new Exception("Probability needs to be between 0.0 and 1.0!");
+        
+        Element = element;
+        Probability = probability;
     }
 }

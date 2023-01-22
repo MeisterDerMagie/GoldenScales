@@ -2,22 +2,96 @@
 using System.Numerics;
 
 namespace ConsoleAdventure;
-public class Room
+public abstract class Room
 {
     public string Name;
     public RoomPosition Position;
-    public readonly HashSet<Door> linkedDoors; //all linked doors
-    public readonly HashSet<Room> linkedRooms; //all linked rooms
+    public readonly HashSet<Door> LinkedDoors; //all linked doors
+    public readonly HashSet<Room> LinkedRooms; //all linked rooms
 
-    public bool IsBossRoom;
+    public bool Discovered { get; private set; }
+    protected abstract string EnterText { get; }
+
+    public virtual string RoomMapIcon => Constants.MapRoom;
+
+    public virtual void Enter()
+    {
+        Discover();
+        Console.WriteLine(EnterText);
+    }
+
+    public void Discover()
+    {
+        Discovered = true;
+        foreach (Door door in LinkedDoors)
+        {
+            door.Discovered = true;
+        }
+    }
+
+    public bool HasDoorAt(Direction direction)
+    {
+        foreach (Door door in LinkedDoors)
+        {
+            Room otherRoom = door.Source == this ? door.Target : door.Source;
+
+            switch (direction)
+            {
+                case Direction.North:
+                    if(Position.North == otherRoom.Position) return true;
+                    break;
+                case Direction.East:
+                    if(Position.East == otherRoom.Position) return true;
+                    break;
+                case Direction.South:
+                    if(Position.South == otherRoom.Position) return true;
+                    break;
+                case Direction.West:
+                    if(Position.West == otherRoom.Position) return true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
+        }
+
+        return false;
+    }
+
+    public Room GetAdjacentRoomAt(Direction direction)
+    {
+        foreach (Door door in LinkedDoors)
+        {
+            Room otherRoom = door.Source == this ? door.Target : door.Source;
+            
+            switch (direction)
+            {
+                case Direction.North:
+                    if(Position.North == otherRoom.Position) return otherRoom;
+                    break;
+                case Direction.East:
+                    if(Position.East == otherRoom.Position) return otherRoom;
+                    break;
+                case Direction.South:
+                    if(Position.South == otherRoom.Position) return otherRoom;
+                    break;
+                case Direction.West:
+                    if(Position.West == otherRoom.Position) return otherRoom;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+            }
+        }
+        
+        return null;
+    }
 
     //Constructor
     public Room(string name, RoomPosition position)
     {
         Name = name;
         Position = position;
-        linkedDoors = new HashSet<Door>();
-        linkedRooms = new HashSet<Room>();
+        LinkedDoors = new HashSet<Door>();
+        LinkedRooms = new HashSet<Room>();
     }
 
     //if a new door got added, we need to also reference it inside the linked rooms
@@ -29,7 +103,7 @@ public class Room
             return;
         }
         
-        linkedDoors.Add(door);
+        LinkedDoors.Add(door);
         Update();
     }
 
@@ -42,7 +116,7 @@ public class Room
             return;
         }
 
-        linkedDoors.Remove(door);
+        LinkedDoors.Remove(door);
         
         Update();
     }
@@ -52,20 +126,20 @@ public class Room
     {
         //-- Refresh all linked rooms --
         //clean up
-        linkedRooms.Clear();
+        LinkedRooms.Clear();
 
         //iterate over all doors that are linked to this room...
-        foreach (Door door in linkedDoors)
+        foreach (Door door in LinkedDoors)
         {
             //if this room is the source of an door ...
             if(door.Source == this)
                 //... add the target to the linked rooms
-                linkedRooms.Add(door.Target);
+                LinkedRooms.Add(door.Target);
             
             //if this room is the target of an door ...
             else if(door.Target == this)
                 //... add the source to the linked rooms
-                linkedRooms.Add(door.Source);
+                LinkedRooms.Add(door.Source);
         }
     }
 

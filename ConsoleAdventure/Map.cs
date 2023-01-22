@@ -1,16 +1,20 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using ConsoleAdventure.Rooms;
+
 namespace ConsoleAdventure;
 
 public static class Map
 {
-    public static void Draw(Dungeon dungeon, Player player)
+    public static void Draw(Dungeon dungeon, Player player, bool drawDiscoveredElementsOnly)
     {
         int highestXCoordinate = 0;
         int highestYCoordinate = 0;
 
         foreach (var room in dungeon.Rooms)
         {
+            if(drawDiscoveredElementsOnly && !room.Discovered) continue;
+            
             if (room.Position.X > highestXCoordinate) highestXCoordinate = (int)room.Position.X;
             if (room.Position.Y > highestYCoordinate) highestYCoordinate = (int)room.Position.Y;
         }
@@ -34,31 +38,45 @@ public static class Map
                 else
                 {
                     Room room = dungeon.GetRoomByPosition(x, y);
-                    string roomIcon = Constants.MapRoom;
-                    bool playerIsInThisRoom = room.Position == player.CurrentPosition;
-                    if (playerIsInThisRoom) roomIcon = Constants.MapPlayerPosition;
-                    if (room.IsBossRoom) roomIcon = Constants.MapRoomBoss;
+                    bool playerIsInThisRoom = room.Position == player.CurrentRoom.Position;
+                    //display player icon
+                    string roomIcon = playerIsInThisRoom ? Constants.MapPlayerPosition : room.RoomMapIcon;
+                    //don't show room if it hasn't been discovered
+                    if(drawDiscoveredElementsOnly) roomIcon = room.Discovered ? roomIcon : Constants.MapRoomNone;
                     Console.Write(roomIcon);
                     
                     //draw door to the right (east)
-
                     bool eastDoorExists = false;
                     bool southDoorExists = false;
                     var eastPosition = new RoomPosition(room.Position.X + 1, room.Position.Y);
                     var southPosition = new RoomPosition(room.Position.X, room.Position.Y + 1);
-                    foreach (Door door in room.linkedDoors)
+                    bool eastDoorDiscovered = false;
+                    bool southDoorDiscovered = false;
+                    foreach (Door door in room.LinkedDoors)
                     {
                         Room otherRoom = door.Source == room ? door.Target : door.Source;
-                        if (otherRoom.Position == eastPosition) eastDoorExists = true;
-                        if (otherRoom.Position == southPosition) southDoorExists = true;
+                        if (otherRoom.Position == eastPosition)
+                        {
+                            eastDoorExists = true;
+                            eastDoorDiscovered = door.Discovered;
+                        }
+
+                        if (otherRoom.Position == southPosition)
+                        {
+                            southDoorExists = true;
+                            southDoorDiscovered = door.Discovered;
+                        }
                     }
 
-                    string consoleOutput = eastDoorExists ? Constants.MapDoorHorizontal : Constants.MapDoorHorizontalNone; 
+                    string consoleOutput = eastDoorExists ? Constants.MapDoorHorizontal : Constants.MapDoorHorizontalNone;
+                    if (drawDiscoveredElementsOnly) consoleOutput = eastDoorDiscovered ? consoleOutput : Constants.MapDoorHorizontalNone;
                     Console.Write(consoleOutput);
 
+                    //South doors
                     string southDoor = southDoorExists
                         ? Constants.MapDoorVertical + Constants.MapDoorHorizontalNone
                         : Constants.MapDoorVerticalNone + Constants.MapDoorHorizontalNone;
+                    if(drawDiscoveredElementsOnly) southDoor = southDoorDiscovered ? southDoor : Constants.MapDoorVerticalNone + Constants.MapDoorHorizontalNone;
                     southDoors += southDoor;
                 }
             }

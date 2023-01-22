@@ -9,4 +9,5 @@ public interface IDamageable
 
     public void DealDamage(int amount);
     public void Heal(int amount);
+    public void HealFully();
 }
