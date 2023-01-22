@@ -67,12 +67,49 @@ public class Dungeon
         Doors.Remove(door);
     }
 
+    public bool RoomExists(RoomPosition position)
+    {
+        foreach (Room room in Rooms)
+        {
+            if (room.Position == position) return true;
+        }
+
+        return false;
+    }
+
+    public bool RoomExists(uint x, uint y) => RoomExists(new RoomPosition(x, y));
+
+    public bool DoorExists(Room room1, Room room2)
+    {
+        foreach (Door door in Doors)
+        {
+            if ((door.Source == room1 && door.Target == room2) ||
+                (door.Source == room2 && door.Target == room1))
+                
+                return true;
+        }
+
+        return false;
+    }
+
+    public Room GetRoomByPosition(RoomPosition position)
+    {
+        foreach (Room room in Rooms)
+        {
+            if (room.Position == position) return room;
+        }
+
+        return null;
+    }
+
+    public Room GetRoomByPosition(uint x, uint y) => GetRoomByPosition(new RoomPosition(x, y));
+
     public override string ToString()
     {
         string output = string.Empty;
 
-        //format rooms - format: V = {a, b, c}
-        output += "V = {";
+        //format rooms - format: Rooms = {a, b, c}
+        output += "Rooms = {";
 
         for (int i = 0; i < Rooms.Count; i++)
         {
@@ -83,7 +120,7 @@ public class Dungeon
         output += "}\n";
         
         //format doors - format: E = {(a, b), {a, c}, (c, b)}   (round braces for directed, curly braces for non-directed doors)
-        output += "E = {";
+        output += "Doors = {";
 
         for (int i = 0; i < Doors.Count; i++)
         {
@@ -92,23 +129,7 @@ public class Dungeon
         }
 
         output += "}\n";
-        
-        //format weights - format: W = {{(a, b), 0.5}, {{a, c}, 0.33}}
-        output += "W = {";
 
-        for (int i = 0; i < Doors.Count; i++)
-        {
-            output += "{";
-            output += Doors[i].ToString();
-            output += ", ";
-            //output += Math.Round(Doors[i].Weight, 1).ToString(CultureInfo.InvariantCulture);
-            output += "}";
-            
-            if (i < Doors.Count - 1) output += ", ";
-        }
-
-        output += "}\n";
-        
         //return result
         return output;
     }

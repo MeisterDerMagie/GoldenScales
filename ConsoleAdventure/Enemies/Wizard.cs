@@ -8,7 +8,7 @@ public class Wizard : Enemy
     
     protected override void Die()
     {
-        Console.WriteLine("The wizard takes his last magical breath and then falls lifeless to the ground.");
+        Console.WriteLine("The wizard takes his last magical breath and then falls lifelessly to the ground.");
         base.Die();
     }
 }

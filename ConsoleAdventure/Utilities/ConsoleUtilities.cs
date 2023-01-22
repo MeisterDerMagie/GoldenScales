@@ -1,6 +1,6 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
-namespace ConsoleAdventure.ConsoleUtilities;
+namespace ConsoleAdventure.Utilities;
 
 public static class ConsoleUtilities
 {

@@ -4,6 +4,7 @@ namespace ConsoleAdventure;
 
 public class Player : IDamageable
 {
+    public RoomPosition CurrentPosition;
     public string Name { get; private set; }
     
     public int MaxHealth { get; private set; }
@@ -12,6 +13,7 @@ public class Player : IDamageable
 
     public Player(string name, int maxHealth)
     {
+        CurrentPosition = new RoomPosition(0, 0);
         Name = name;
         MaxHealth = maxHealth;
         Health = maxHealth;
