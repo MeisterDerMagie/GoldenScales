@@ -5,21 +5,32 @@ namespace ConsoleAdventure.Items;
 public abstract class Item : IInteractable
 {
     public string Name { get; }
-    public bool Price { get; }
+    public int Value { get; }
     public bool Equippable { get; }
     public bool Consumable { get; }
 
     public string Keyword => Name;
-    public string[] Interactions { get; }
+    public List<Command> Interactions { get; }
     
-    protected Item(bool equippable, bool consumable, bool price, string[] interactions, string name)
+    protected Item(bool equippable, bool consumable, int value, List<Command> interactions, string name)
     {
         Equippable = equippable;
         Consumable = consumable;
-        Price = price;
+        Value = value;
         Interactions = interactions;
         Name = name;
+        
+        //interactions
+        Interactions.Add(new Command("Examine", new List<string>(){"examine"}, Examine));
     }
 
-    public abstract void Interact(string userInput);
+    public virtual void Interact(string userInput)
+    {
+        foreach (Command interaction in Interactions)
+        {
+            //if(userInput)
+        }
+    }
+
+    public abstract void Examine();
 }

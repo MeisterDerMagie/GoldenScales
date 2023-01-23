@@ -18,6 +18,5 @@ public class StartRoom : Room
     {
         base.Enter();
         _isStartOfAdventure = false;
-        throw new NotImplementedException();
     }
 }

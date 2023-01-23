@@ -4,7 +4,7 @@ namespace ConsoleAdventure.Utilities;
 
 public static class ConsoleUtilities
 {
-    private static bool InputBoolean(string question)
+    public static bool InputBoolean(string question)
     {
         while (true)
         {
@@ -32,12 +32,12 @@ public static class ConsoleUtilities
         }
     }
 
-    private static string InputString(string question)
+    public static string InputString(string question)
     {
         while (true)
         {
             Console.Write(question);
-            Console.Write(" ");
+            Console.Write("\n");
 
             string userInput = Console.ReadLine();
 
@@ -48,7 +48,7 @@ public static class ConsoleUtilities
         }
     }
 
-    private static int InputInteger(string question, bool positiveOnly = true, bool allowZero = true)
+    public static int InputInteger(string question, bool positiveOnly = true, bool allowZero = true)
     {
         while (true)
         {

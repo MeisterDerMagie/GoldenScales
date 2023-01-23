@@ -21,17 +21,49 @@ public class Player : IDamageable
     }
     private int _health;
 
+    public int Gold { get; private set; }
+    
     public List<Item> Inventory = new();
 
+    public static Player Singleton;
 
+    #region Gold
+    public void AddGold(int amount, bool silently = false)
+    {
+        Gold += amount;
+        if(!silently) Console.WriteLine($"You add {amount} gold to your purse and now have a total of {Gold}.");
+    }
+
+    public bool HasGold(int amount)
+    {
+        return (Gold >= amount);
+    }
+
+    public void RemoveGold(int amount)
+    {
+        Gold -= amount;
+        Console.WriteLine($"Your purse is now ");
+    }
+    #endregion
+
+    #region Inventory
+    public void AddToIventory(Item item, bool silently = false)
+    {
+        Inventory.Add(item);
+        if(!silently) Console.WriteLine($"You add {item.Name} to your inventory.");
+    }
+    #endregion
+    
     public Player(string name, int maxHealth, Room startingRoom)
     {
         CurrentRoom = startingRoom;
         Name = name;
         MaxHealth = maxHealth;
         Health = maxHealth;
+
+        Singleton = this;
     }
-    
+
     public void DealDamage(int amount)
     {
         Health -= amount;

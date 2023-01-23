@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Text;
 using ConsoleAdventure.Utilities;
 
 namespace ConsoleAdventure;
@@ -6,40 +8,40 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        //random seed
-        
-        int seed = new Random().Next(int.MinValue, int.MaxValue);
-        RandomUtilities.SetSeed(seed);
-        Console.WriteLine($"Seed is: {seed}");
-        
-        
-        
-        //good seeds:
-        //2070994485
-        
-        //fixed seed
-        /*
-        int seed = 12345;
-        RandomUtilities.SetSeed(seed);
-        Console.WriteLine($"Seed is: {seed}");
-        */
-        
-        
-        //generate dungeon
-        Dungeon dungeon = DungeonGenerator.Generate( 25, 15, seed);
-        var player = new Player("Martin", 100, dungeon.StartingRoom);
-        
-        //draw dungeon map
-        Map.Draw(dungeon, player, false);
-        
-        //Welcome text
-        Console.WriteLine("Welcome to the musty dungeon! Legends say that a valuable treasure is hidden within these walls, guarded by a cruel Lindworm. \nWill you be able to defy all the dangers that lurk down here and live out the rest of your life in prosperity? \nGood luck, adventurer!");
 
-        
-        //create dungeon navigation
-        var dungeonNavigation = new DungeonNavigation(dungeon, player);
-        
-        //TEST: Dungeon navigation
-        dungeonNavigation.Travel(Direction.North);
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("A new adventure begins.");
+
+            int seed = GetSeed();
+
+            var game = new Game(seed);
+        }
+    }
+
+    private static int GetSeed()
+    {
+        bool wantsToEnterOwnSeed = ConsoleUtilities.InputBoolean("Do you want to input a custom seed?");
+        int seed;
+            
+        //if the player wants to enter a custom seed
+        if (wantsToEnterOwnSeed)
+        {
+            string userInput = ConsoleUtilities.InputString("Enter a seed for the procedural generation of the dungeon: ");
+            var algo = SHA1.Create();
+            seed = BitConverter.ToInt32(algo.ComputeHash(Encoding.UTF8.GetBytes(userInput)));
+        }
+
+        //otherwise generate a random seed
+        else
+        {
+            seed = new Random().Next(int.MinValue, int.MaxValue);
+            RandomUtilities.SetSeed(seed);
+        }
+            
+        Console.WriteLine($"Seed is: {seed}");
+
+        return seed;
     }
 }

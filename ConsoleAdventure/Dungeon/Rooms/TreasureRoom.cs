@@ -1,5 +1,8 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using ConsoleAdventure.Items;
+using ConsoleAdventure.Utilities;
+
 namespace ConsoleAdventure.Rooms;
 
 public class TreasureRoom : Room
@@ -19,6 +22,17 @@ public class TreasureRoom : Room
     public override void Enter()
     {
         base.Enter();
-        throw new NotImplementedException();
+
+        //add gold
+        int goldAmount = RandomUtilities.RandomInt(40, 105);
+        Player.Singleton.AddGold(goldAmount, true);
+        
+        //add random item to the inventory
+        int itemValue = RandomUtilities.RandomInt(30, 90);
+        Item item = ItemFactory.GenerateRandomItem(itemValue);
+        Player.Singleton.AddToIventory(item, true);
+        
+        //let player know about loot
+        Console.WriteLine($"You search the treasure for valuables and find {goldAmount} gold and a {item.Name}.");
     }
 }

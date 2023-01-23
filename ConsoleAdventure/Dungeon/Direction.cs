@@ -4,6 +4,7 @@ namespace ConsoleAdventure;
 
 public enum Direction
 {
+    NONE,
     North,
     East,
     South,

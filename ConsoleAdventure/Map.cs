@@ -8,6 +8,8 @@ public static class Map
 {
     public static void Draw(Dungeon dungeon, Player player, bool drawDiscoveredElementsOnly)
     {
+        Console.WriteLine("");
+        
         int highestXCoordinate = 0;
         int highestYCoordinate = 0;
 
