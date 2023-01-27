@@ -71,11 +71,9 @@ public static class ConsoleUtilities
                 {
                     return 0;
                 }
-                else
-                {
-                    Console.WriteLine("Zero is not allowed.");
-                    continue;
-                }
+
+                Console.WriteLine("Zero is not allowed.");
+                continue;
             }
 
             if (ret < 0)

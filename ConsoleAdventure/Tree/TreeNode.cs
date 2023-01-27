@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-
-namespace ConsoleAdventure;
+﻿namespace ConsoleAdventure;
 
 public class TreeNode
 {
@@ -54,14 +50,14 @@ public class TreeNode
     }
 
 
-    public override string ToString() => Level() + ":" + Value.ToString() + " ";
+    public override string ToString() => Level() + ":" + Value + " ";
 
     public string Inorder() {
         string order = "";
         if (LeftChild != null){
             order += LeftChild.Inorder();
         }
-        order += this.ToString();
+        order += ToString();
         if (RightChild != null)
         {
             order += RightChild.Inorder();
@@ -72,7 +68,7 @@ public class TreeNode
     public string Preorder()
     {
         string order = "";
-        order += this.ToString();
+        order += ToString();
         if (LeftChild != null)
         {
             order += LeftChild.Preorder();
@@ -95,7 +91,7 @@ public class TreeNode
         {
             order += RightChild.Postorder();
         }
-        order += this.ToString();
+        order += ToString();
         return order;
     }
 
@@ -149,12 +145,12 @@ public class TreeNode
     public void PrintNode()
     {
         string line = "";
-        for (int i=0; i<this.Level(); i++)
+        for (int i=0; i<Level(); i++)
         {
             line += "|  ";
         }
         line += "+--";
-        line += this.ToString();
+        line += ToString();
         Console.WriteLine(line);
         if (LeftChild != null)
         {

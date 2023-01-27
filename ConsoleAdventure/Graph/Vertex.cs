@@ -6,8 +6,8 @@ public class Vertex
 {
     public string Name;
     public Vector2 Position;
-    private HashSet<Edge> linkedEdges; //all linked edges, regardless of if they are directional or non-directional
-    private HashSet<Vertex> linkedVertices; //all linked vertices, regardless of if they are connected with directional or non-directional edges
+    private HashSet<Edge> _linkedEdges; //all linked edges, regardless of if they are directional or non-directional
+    private HashSet<Vertex> _linkedVertices; //all linked vertices, regardless of if they are connected with directional or non-directional edges
     
     /// <summary> All out-edges. Does not include "incoming" directed edges. </summary>
     public HashSet<Edge> OutEdges;
@@ -20,8 +20,8 @@ public class Vertex
     {
         Name = name;
         Position = position;
-        linkedEdges = new HashSet<Edge>();
-        linkedVertices = new HashSet<Vertex>();
+        _linkedEdges = new HashSet<Edge>();
+        _linkedVertices = new HashSet<Vertex>();
         OutEdges = new HashSet<Edge>();
         OutVertices = new HashSet<Vertex>();
     }
@@ -31,11 +31,11 @@ public class Vertex
     {
         if (!edge.IncludesVertex(this))
         {
-            Console.WriteLine($"Can't register the edge {edge.ToString()} because it's not linked to this vertex {this.ToString()}!");
+            Console.WriteLine($"Can't register the edge {edge.ToString()} because it's not linked to this vertex {ToString()}!");
             return;
         }
         
-        linkedEdges.Add(edge);
+        _linkedEdges.Add(edge);
         Update();
     }
 
@@ -44,11 +44,11 @@ public class Vertex
     {
         if (!edge.IncludesVertex(this))
         {
-            Console.WriteLine($"Can't unregister the edge {edge.ToString()} because it's not linked to this vertex {this.ToString()}!");
+            Console.WriteLine($"Can't unregister the edge {edge.ToString()} because it's not linked to this vertex {ToString()}!");
             return;
         }
 
-        linkedEdges.Remove(edge);
+        _linkedEdges.Remove(edge);
         
         Update();
     }
@@ -59,7 +59,7 @@ public class Vertex
         Position = newPos;
 
         //let all edges that are linked to this vertex know about the position change, so they can update the weight (distance) accordingly
-        foreach (Edge edge in linkedEdges)
+        foreach (Edge edge in _linkedEdges)
         {
             edge.UpdateWeight();
         }
@@ -70,20 +70,20 @@ public class Vertex
     {
         //-- Refresh all linked vertices --
         //clean up
-        linkedVertices.Clear();
+        _linkedVertices.Clear();
 
         //iterate over all edges that are linked to this vertex...
-        foreach (Edge edge in linkedEdges)
+        foreach (Edge edge in _linkedEdges)
         {
             //if this vertex is the source of an edge ...
             if(edge.Source == this)
                 //... add the target to the linked vertices
-                linkedVertices.Add(edge.Target);
+                _linkedVertices.Add(edge.Target);
             
             //if this vertex is the target of an edge ...
             else if(edge.Target == this)
                 //... add the source to the linked vertices
-                linkedVertices.Add(edge.Source);
+                _linkedVertices.Add(edge.Source);
         }
         
         //-- Refresh all connected edges --
@@ -91,7 +91,7 @@ public class Vertex
         OutEdges.Clear();
         
         //iterate over all edges that are linked to this vertex...
-        foreach (Edge edge in linkedEdges)
+        foreach (Edge edge in _linkedEdges)
         {
             //if this vertex is the target of an edge...
             if(edge.Target == this)
@@ -109,7 +109,7 @@ public class Vertex
         OutVertices.Clear();
         
         //iterate over all edges that are linked to this vertex...
-        foreach (Edge edge in linkedEdges)
+        foreach (Edge edge in _linkedEdges)
         {
             //if this vertex is the source of an edge, we can travel to the target vertex, so add it to the connected vertices list
             if (edge.Source == this)

@@ -30,6 +30,9 @@ public class EnemyRoom : Room
     public override void Enter()
     {
         base.Enter();
-        throw new NotImplementedException();
+        
+        //begin fight
+        var fight = new Fight(Player.Singleton, Enemy);
+        Game.StateMachine.SetState(fight);
     }
 }

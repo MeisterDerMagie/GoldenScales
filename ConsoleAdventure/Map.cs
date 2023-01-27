@@ -1,7 +1,5 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
-using ConsoleAdventure.Rooms;
-
 namespace ConsoleAdventure;
 
 public static class Map

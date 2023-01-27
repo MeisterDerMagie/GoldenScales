@@ -1,6 +1,4 @@
 ﻿//(c) copyright by Martin M. Klöckener
-using System.Numerics;
-
 namespace ConsoleAdventure;
 public abstract class Room
 {
@@ -13,6 +11,7 @@ public abstract class Room
     protected abstract string EnterText { get; }
 
     public virtual string RoomMapIcon => Constants.MapRoom;
+    public List<Command> RoomCommands = new();
 
     public virtual void Enter()
     {
@@ -99,7 +98,7 @@ public abstract class Room
     {
         if (!door.IncludesRoom(this))
         {
-            Console.WriteLine($"Can't register the door {door.ToString()} because it's not linked to this room {this.ToString()}!");
+            Console.WriteLine($"Can't register the door {door.ToString()} because it's not linked to this room {ToString()}!");
             return;
         }
         
@@ -112,7 +111,7 @@ public abstract class Room
     {
         if (!door.IncludesRoom(this))
         {
-            Console.WriteLine($"Can't unregister the door {door.ToString()} because it's not linked to this room {this.ToString()}!");
+            Console.WriteLine($"Can't unregister the door {door.ToString()} because it's not linked to this room {ToString()}!");
             return;
         }
 

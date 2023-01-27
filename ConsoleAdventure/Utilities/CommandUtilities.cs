@@ -13,7 +13,16 @@ public static class CommandUtilities
         
         foreach (string word in words)
         {
-            //try to execute the first command that matches a keyword the user entered
+            //try to execute the first command that matches a keyword the user entered (start with the global commands)
+            foreach (Command command in Game.GlobalCommands)
+            {
+                if (!command.ContainsKeyword(word)) continue;
+                
+                command.Execute(words);
+                return true;
+            }
+            
+            //then do the same for the not global commands
             foreach (Command command in availableCommands)
             {
                 if (!command.ContainsKeyword(word)) continue;
@@ -29,6 +38,12 @@ public static class CommandUtilities
     public static void ListAvailableCommands(List<Command> availableCommands)
     {
         Console.WriteLine("You can perform the following actions: \n");
+
+        foreach (Command command in Game.GlobalCommands)
+        {
+            if(command.Hidden) continue;
+            Console.WriteLine($"- {command.Name}");
+        }
         
         foreach (Command command in availableCommands)
         {
@@ -46,7 +61,7 @@ public static class CommandUtilities
         string thirdDoor = "The third door leads to the ";
         string fourthDoor = "The last door leads to the ";
 
-        var doorSentences = new List<string>() { firstDoor, secondDoor, thirdDoor, fourthDoor };
+        var doorSentences = new List<string> { firstDoor, secondDoor, thirdDoor, fourthDoor };
 
         int doorCount = 0;
 

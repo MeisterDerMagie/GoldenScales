@@ -1,6 +1,4 @@
 ﻿//(c) copyright by Martin M. Klöckener
-using System.Globalization;
-
 namespace ConsoleAdventure;
 public class Dungeon
 {
@@ -41,7 +39,7 @@ public class Dungeon
         if (!Rooms.Contains(room))
         {
             //let the user know and don't do anything
-            Console.WriteLine($"Can't remove room \"{room.ToString()}\" because it's not part of this graph!");
+            Console.WriteLine($"Can't remove room \"{room}\" because it's not part of this graph!");
             return;
         }
 

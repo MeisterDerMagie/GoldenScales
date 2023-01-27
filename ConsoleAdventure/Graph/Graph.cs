@@ -38,7 +38,7 @@ public class Graph
         if (!Vertices.Contains(vertex))
         {
             //let the user know and don't do anything
-            Console.WriteLine($"Can't remove vertex \"{vertex.ToString()}\" because it's not part of this graph!");
+            Console.WriteLine($"Can't remove vertex \"{vertex}\" because it's not part of this graph!");
             return;
         }
 

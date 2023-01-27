@@ -8,7 +8,7 @@ namespace ConsoleAdventure;
 public static class DungeonGenerator
 {
     private static Dungeon dungeon;
-    private static int generatedRooms = 0;
+    private static int generatedRooms;
     private static List<RoomType> generatedRoomTypes = new();
 
     public static Dungeon Generate(int mainPathLength, int subBranches, int seed)

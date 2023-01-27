@@ -21,7 +21,7 @@ public abstract class Item : IInteractable
         Name = name;
         
         //interactions
-        Interactions.Add(new Command("Examine", new List<string>(){"examine"}, Examine));
+        Interactions.Add(new Command("Examine", new List<string> {"examine"}, Examine));
     }
 
     public virtual void Interact(string userInput)

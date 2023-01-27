@@ -10,9 +10,13 @@ public static class StringParser
         return lower switch
         {
             "north" => Direction.North,
+            "up" => Direction.North,
             "east" => Direction.East,
+            "right" => Direction.East,
             "south" => Direction.South,
+            "down" => Direction.South,
             "west" => Direction.West,
+            "left" => Direction.West,
             _ => Direction.NONE
         };
     }

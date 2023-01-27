@@ -42,7 +42,7 @@ public class Player : IDamageable
     public void RemoveGold(int amount)
     {
         Gold -= amount;
-        Console.WriteLine($"Your purse is now ");
+        Console.WriteLine("Your purse is now ");
     }
     #endregion
 
@@ -84,6 +84,12 @@ public class Player : IDamageable
 
     public void HealFully()
     {
+        if (Health == MaxHealth)
+        {
+            Console.WriteLine("You heal all your wounds, but ... there were no wounds, you already had full health. That was wasted!");
+            return;
+        }
+        
         Health = MaxHealth;
         Console.WriteLine($"All your wounds heal and you are back to your full health ({MaxHealth}). That felt great!");
     }

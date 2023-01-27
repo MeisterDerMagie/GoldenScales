@@ -1,6 +1,4 @@
 ﻿//(c) copyright by Martin M. Klöckener
-using System.Numerics;
-
 namespace ConsoleAdventure;
 public class Door
 {
