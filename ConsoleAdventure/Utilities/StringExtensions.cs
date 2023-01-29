@@ -12,4 +12,23 @@ public static class StringExtensions
 
         return words;
     }
+
+    
+    public static string RemoveFirstOccurence(this string sourceString, string removeString)
+    {
+        int index = sourceString.IndexOf(removeString, StringComparison.Ordinal);
+        string stringWithoutFirstOccurenceOfSubstring = (index < 0)
+            ? sourceString
+            : sourceString.Remove(index, removeString.Length);
+        
+        return stringWithoutFirstOccurenceOfSubstring.RemoveDuplicateWhiteSpaces();
+    }
+
+    //https://stackoverflow.com/a/206724/13174465
+    public static string RemoveDuplicateWhiteSpaces(this string sourceString)
+    {
+        //also removes leading and trailing spaces
+        string cleanString = string.Join( " ", sourceString.Split( new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries ));
+        return cleanString;
+    }
 }

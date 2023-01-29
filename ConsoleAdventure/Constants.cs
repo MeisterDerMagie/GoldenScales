@@ -1,5 +1,6 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using ConsoleAdventure.DataTypes;
 using ConsoleAdventure.Rooms;
 using ConsoleAdventure.Utilities;
 
@@ -27,7 +28,16 @@ public static class Constants
     public const string MapDoorVerticalNone = " ";
     #endregion
     
-    #region DungeonGeneration
+    #region Damage
+    public static Range<int> TrapDamage = new(3, 10); 
+    #endregion
+
+    #region Gold Values
+    public const int ValueRareDiamondInEmptyRoom = 12;
+    public static Range<int> ChestValueRange => new(3, 20);
+    #endregion
+    
+    #region Dungeon Generation
     public const float ProbabilityForDoorToAlreadyExistingAdjacentRoom = 0.3f;
     
     private const float ProbabilityRoomNorth = 0.25f;
@@ -56,10 +66,10 @@ public static class Constants
     private const float ProbabilityEnemyRoom = 0f;
     private const float ProbabilityTraderRoom = 0f;
     private const float ProbabilityTreasureRoom = 0f;
-    private const float ProbabilityChestRoom = 0f;
+    private const float ProbabilityChestRoom = 1f;
     private const float ProbabilityMimicRoom = 0f;
     private const float ProbabilityTrapRoom = 0f;
-    private const float ProbabilityHealingWellRoom = 1f;
+    private const float ProbabilityHealingWellRoom = 0f;
     public static readonly List<ElementProbability<RoomType>> RoomTypeProbabilities = new() { new ElementProbability<RoomType>(RoomType.ChestRoom, ProbabilityChestRoom), new ElementProbability<RoomType>(RoomType.EmptyRoom, ProbabilityEmptyRoom), new ElementProbability<RoomType>(RoomType.EnemyRoom, ProbabilityEnemyRoom), new ElementProbability<RoomType>(RoomType.TraderRoom, ProbabilityTraderRoom), new ElementProbability<RoomType>(RoomType.TreasureRoom, ProbabilityTreasureRoom), new ElementProbability<RoomType>(RoomType.TrapRoom, ProbabilityTrapRoom), new ElementProbability<RoomType>(RoomType.HealingWellRoom, ProbabilityHealingWellRoom), new ElementProbability<RoomType>(RoomType.MimicRoom, ProbabilityMimicRoom)};
 
     #endregion

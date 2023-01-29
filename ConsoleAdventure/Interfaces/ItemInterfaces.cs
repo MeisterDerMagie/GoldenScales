@@ -1,11 +1,4 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
-namespace ConsoleAdventure;
+namespace ConsoleAdventure.Items;
 
-public interface IEquippable
-{
-}
-
-public interface IConsumable
-{
-}

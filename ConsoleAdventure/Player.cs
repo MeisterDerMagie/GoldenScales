@@ -1,6 +1,7 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
 using ConsoleAdventure.Items;
+using ConsoleAdventure.Utilities;
 
 namespace ConsoleAdventure;
 
@@ -24,6 +25,7 @@ public class Player : IDamageable
     public int Gold { get; private set; }
     
     public List<Item> Inventory = new();
+    public Dictionary<EquipSlot, Equippable> EquippedItems;
 
     public static Player Singleton;
 
@@ -52,6 +54,90 @@ public class Player : IDamageable
         Inventory.Add(item);
         if(!silently) Console.WriteLine($"You add {item.Name} to your inventory.");
     }
+
+    public void OpenInventory()
+    {
+        var inventoryState = new SearchInventory(Game.StateMachine.CurrentState);
+        Game.StateMachine.SetState(inventoryState);
+    }
+
+    public void CloseInventory()
+    {
+        if (Game.StateMachine.CurrentState is not SearchInventory)
+        {
+            Console.WriteLine("ERROR: Can't close the inventory, because apparently it's not open.");
+            return;
+        }
+
+        //restore previous state
+        var inventoryState = Game.StateMachine.CurrentState as SearchInventory;
+        Console.WriteLine("You close your inventory.");
+        Game.StateMachine.SetState(inventoryState.PreviousState, false);
+    }
+    #endregion
+    
+    #region Equipment
+    public bool Equip(Equippable item)
+    {
+        if (item == null)
+        {
+            Console.WriteLine("ERROR: Item to equip can't be null.");
+            return false;
+        }
+        
+        if (!item.Equippable)
+        {
+            Console.WriteLine($"You can't equip the item {item.Name}.");
+            return false;
+        }
+        
+        bool slotIsOccupied = EquippedItems[item.EquipSlot] != null;
+
+        if (!slotIsOccupied)
+        {
+            EquippedItems[item.EquipSlot] = item;
+            return true;
+        }
+        else
+        {
+            bool playerWantsToUnequip = ConsoleUtilities.InputBoolean($"There already is an item equipped at the {item.EquipSlot.ToString()} slot. Do you want to unequip it and equip the new item instead?");
+            if (!playerWantsToUnequip)
+            {
+                Console.WriteLine("You decided not to equip the item.");
+                return false;
+            }
+            
+            //unequip
+            AddToIventory(EquippedItems[item.EquipSlot], true);
+            
+            //then equip new item
+            EquippedItems[item.EquipSlot] = item;
+            return true;
+        }
+    }
+
+    public bool UnEquip(Item item, bool silently = false)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UnEquip(EquipSlot slot, bool silently = false)
+    {
+        if (EquippedItems[slot] == null)
+        {
+            if(!silently)
+                Console.WriteLine($"Can't unequip the {slot.ToString()} slot because there is no item equipped.");
+            return;
+        }
+
+        Item equippedItem = EquippedItems[slot];
+        
+        AddToIventory(equippedItem, true);
+        EquippedItems[slot] = null;
+        
+        if (!silently)
+            Console.WriteLine($"You unequipped the {equippedItem.Name}.");
+    }
     #endregion
     
     public Player(string name, int maxHealth, Room startingRoom)
@@ -60,7 +146,15 @@ public class Player : IDamageable
         Name = name;
         MaxHealth = maxHealth;
         Health = maxHealth;
-
+        
+        //set up equippedItems dictionary
+        EquippedItems = new Dictionary<EquipSlot, Equippable>();
+        foreach (EquipSlot equipSlot in Enum.GetValues<EquipSlot>())
+        {
+            EquippedItems.Add(equipSlot, null);
+        }
+        
+        //pseudo singleton
         Singleton = this;
     }
 

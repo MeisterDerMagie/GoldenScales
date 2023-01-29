@@ -6,8 +6,6 @@ namespace ConsoleAdventure;
 
 public class DungeonNavigation
 {
-    public event Action OnPlayerEnteredNewRoom = delegate {  };
-    
     private Dungeon _dungeon;
     private Player _player;
     
@@ -30,7 +28,6 @@ public class DungeonNavigation
             Room newRoom = _player.CurrentRoom.GetAdjacentRoomAt(direction);
             _player.CurrentRoom = newRoom;
             newRoom.Enter();
-            OnPlayerEnteredNewRoom?.Invoke();
             return true;
         }
         

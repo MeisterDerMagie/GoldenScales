@@ -27,33 +27,26 @@ public class Game
         var dungeonNavigation = new DungeonNavigation(dungeon, player);
         
         //Global Commands (game commands can be called from any game state)
-        var gameCommands = new List<Command>();
-
-        var helpCommand = new Command("options (list all available commands)", new List<string> { "help", "options", "commands", "actions", "list" }, ListAvailableCommands);
-        gameCommands.Add(helpCommand);
-        var quitCommand = new Command("quit (quit the game)", new List<string> { "quit", "q", "exit" }, Quit);
-        gameCommands.Add(quitCommand);
-        var restartCommand = new Command("restart (start a new game)", new List<string> { "restart" }, Restart);
-        gameCommands.Add(restartCommand);
-        var showHealthCommand = new Command("health (show your current health)", new List<string> { "health", "hp" }, () => Console.WriteLine($"Your current health is {player.Health}."));
-        gameCommands.Add(showHealthCommand);
+        GlobalCommands.Clear();
+        SetGlobalCommands();
         
         //cheat commands
-        var cheatCommands = new List<Command>();
-        var mapFull = new Command("mapFull (show the full map, not just the dicovered area)", new List<string> {"mapFull"}, () => Map.Draw(dungeon, player, false), true);
-        cheatCommands.Add(mapFull);
-        
-        //global commands
-        GlobalCommands.Clear();
-        GlobalCommands.AddRange(gameCommands);
-        GlobalCommands.AddRange(cheatCommands);
-        
+        SetCheatCommands(dungeon);
+
         //Set up state machine
         StateMachine = new StateMachine();
         ExplorationState = new Explore(dungeon, player, dungeonNavigation);
 
         StateMachine.SetState(ExplorationState);
 
+        //add items to inventory
+        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(12));
+        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(45));
+        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
+        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
+        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
+        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
+        
         //Start Game Loop
         GameLoop();
     }
@@ -68,9 +61,37 @@ public class Game
 
     private void ListAvailableCommands() => CommandUtilities.ListAvailableCommands(StateMachine.CurrentState.AvailableCommands);
 
+    private void SetGlobalCommands()
+    {
+        var gameCommands = new List<Command>();
+
+        var helpCommand = new Command("options (list all available commands)", new List<string> { "help", "options", "commands", "actions" }, ListAvailableCommands, true);
+        var quitCommand = new Command("quit (quit the game)", new List<string> { "quit", "q", "exit" }, Quit);
+        var restartCommand = new Command("restart (start a new game)", new List<string> { "restart" }, Restart);
+        var showHealthCommand = new Command("health (show your current health)", new List<string> { "health", "hp" }, () => Console.WriteLine($"Your current health is {Player.Singleton.Health}."));
+
+        gameCommands.Add(helpCommand);
+        gameCommands.Add(quitCommand);
+        gameCommands.Add(restartCommand);
+        gameCommands.Add(showHealthCommand);
+        
+        GlobalCommands.AddRange(gameCommands);
+    }
+
+    private void SetCheatCommands(Dungeon dungeon)
+    {
+        var cheatCommands = new List<Command>();
+        
+        var mapFull = new Command("mapFull (show the full map, not just the dicovered area)", new List<string> {"mapFull"}, () => Map.Draw(dungeon, Player.Singleton, false), true);
+        
+        cheatCommands.Add(mapFull);
+        
+        GlobalCommands.AddRange(cheatCommands);
+    }
+
     private static void Quit()
     {
-        bool quit = ConsoleUtilities.InputBoolean("Do you really want to quit? All progress will be lost!");
+        bool quit = ConsoleUtilities.InputBoolean("Do you really want to quit the game? All progress will be lost!");
         if(quit) Environment.Exit(0);
     }
 

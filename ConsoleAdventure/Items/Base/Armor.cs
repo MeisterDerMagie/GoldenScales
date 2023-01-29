@@ -1,13 +1,11 @@
 ﻿namespace ConsoleAdventure.Items;
 
-public abstract class Armor : Item
+public abstract class Armor : Equippable
 {
     public int Protection { get; }
-    public BodyPart BodyPart;
 
-    protected Armor(int value, List<Command> interactions, string name, int protection, BodyPart bodyPart) : base(true, false, value, interactions, name)
+    protected Armor(string name, int goldValue, int protection, EquipSlot equipSlot) : base(name, goldValue, equipSlot)
     {
         Protection = protection;
-        BodyPart = bodyPart;
     }
 }

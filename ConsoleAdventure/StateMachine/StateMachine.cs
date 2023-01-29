@@ -23,7 +23,7 @@ public class StateMachine
         
     }
 
-    public void SetState(IState state)
+    public void SetState(IState state, bool callOnEnter = true)
     {
         if (state == CurrentState)
             return;
@@ -34,8 +34,10 @@ public class StateMachine
         _transitions.TryGetValue(CurrentState.GetType(), out _currentTransitions);
         if (_currentTransitions == null)
             _currentTransitions = emptyTransitions;
-      
-        CurrentState.OnEnter();
+
+        if (callOnEnter) CurrentState.OnEnter();
+        //if we return to this state instead of starting a new one
+        else Console.WriteLine(CurrentState.TextWhenReturningToThisState);
     }
 
     public void AddTransition(IState from, IState to, Func<bool> predicate)

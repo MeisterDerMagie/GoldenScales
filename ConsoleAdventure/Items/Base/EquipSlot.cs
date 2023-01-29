@@ -2,12 +2,15 @@
 
 namespace ConsoleAdventure.Items;
 
-public enum BodyPart
+public enum EquipSlot
 {
     Head,
     Arms,
     Hands,
     Torso,
     Legs,
-    Feet
+    Feet,
+    Weapon,
+    Ring,
+    Neck
 }

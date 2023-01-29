@@ -6,6 +6,8 @@ namespace ConsoleAdventure;
 public class Explore : IState
 {
     public List<Command> AvailableCommands { get; set; }
+    public string TextWhenReturningToThisState => "You continue exploring the dungeon.";
+    
     private readonly Dungeon Dungeon;
     private readonly Player Player;
     private readonly DungeonNavigation DungeonNavigation;
@@ -18,11 +20,10 @@ public class Explore : IState
         DungeonNavigation = dungeonNavigation;
     }
 
+
     public void OnEnter()
     {
-        DungeonNavigation.OnPlayerEnteredNewRoom += UpdateAvailableCommands;
-        
-        //set available commands
+        //update available commands
         UpdateAvailableCommands();
     }
 
@@ -38,7 +39,7 @@ public class Explore : IState
 
     public void OnExit()
     {
-        DungeonNavigation.OnPlayerEnteredNewRoom -= UpdateAvailableCommands;
+        
     }
 
     private void UpdateAvailableCommands()
@@ -53,10 +54,12 @@ public class Explore : IState
         var travelCommand = new Command("go + direction (e.g. \"go north\")", new List<string> { "go", "travel" }, DungeonNavigation.Go);
         var mapCommand = new Command("map (look at your map)", new List<string> { "map" }, () => Map.Draw(Dungeon, Player, true));
         var listDoorsCommand = new Command("doors (what doors are in this room)", new List<string> { "doors", "where" }, () => CommandUtilities.ListAvailableDoors(Player.CurrentRoom));
-        
+        var openInventoryCommand = new Command("inventory (open your inventory to look at your items)", new List<string>{"open inventory", "inventory"}, () => Player.Singleton.OpenInventory());
+
         AvailableCommands.Add(travelCommand);
         AvailableCommands.Add(mapCommand);
         AvailableCommands.Add(listDoorsCommand);
+        AvailableCommands.Add(openInventoryCommand);
     }
 
     private void AddRoomCommands()

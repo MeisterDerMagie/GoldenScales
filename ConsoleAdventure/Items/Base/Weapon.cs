@@ -1,10 +1,10 @@
 ﻿namespace ConsoleAdventure.Items;
 
-public abstract class Weapon : Item, IEquippable
+public abstract class Weapon : Equippable
 {
     public int Damage { get; }
 
-    protected Weapon(bool equippable, bool consumable, int value, List<Command> interactions, string name, int damage) : base(equippable, consumable, value, interactions, name)
+    protected Weapon(string name, int goldValue, int damage) : base(name, goldValue, EquipSlot.Weapon)
     {
         Damage = damage;
     }

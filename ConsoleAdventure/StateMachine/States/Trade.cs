@@ -5,12 +5,14 @@ namespace ConsoleAdventure;
 public class Trade : IState
 {
     public List<Command> AvailableCommands { get; set; }
-
+    public string TextWhenReturningToThisState => "You continue trading.";
+    
     public Trade()
     {
         AvailableCommands = new List<Command>();
     }
-    
+
+
     public void OnEnter()
     {
         throw new NotImplementedException();

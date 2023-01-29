@@ -5,6 +5,7 @@ namespace ConsoleAdventure;
 public class Dialog : IState
 {
     public List<Command> AvailableCommands { get; set; }
+    public string TextWhenReturningToThisState => "You continue your conversation with NPC-NAME.";
 
     public Dialog()
     {

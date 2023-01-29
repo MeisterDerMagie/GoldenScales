@@ -21,12 +21,14 @@ public static class ConsoleUtilities
             if ((string.CompareOrdinal(userInput, "n") == 0)
                 || (string.CompareOrdinal(userInput, "no") == 0))
             {
+                Console.Write("\n");
                 return false;
             }
             
             if ((string.CompareOrdinal(userInput, "y") == 0)
                 || (string.CompareOrdinal(userInput, "yes") == 0))
             {
+                Console.Write("\n");
                 return true;
             }
         }
@@ -44,6 +46,7 @@ public static class ConsoleUtilities
             if (string.IsNullOrEmpty(userInput))
                 continue;
 
+            Console.Write("\n");
             return userInput;
         }
     }
@@ -85,6 +88,7 @@ public static class ConsoleUtilities
                 }
             }
 
+            Console.Write("\n");
             return ret;
         }
     }

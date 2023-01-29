@@ -7,6 +7,7 @@ namespace ConsoleAdventure;
 public class Fight : IState
 {
     public List<Command> AvailableCommands { get; set; }
+    public string TextWhenReturningToThisState => $"You're back to the fight against the {_enemy.Name}.";
     
     private readonly Player _player;
     private readonly Enemy _enemy;
@@ -18,6 +19,7 @@ public class Fight : IState
         _player = player;
         _enemy = enemy;
     }
+
 
     public void OnEnter()
     {

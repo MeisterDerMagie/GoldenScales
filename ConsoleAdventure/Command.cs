@@ -1,4 +1,5 @@
 ﻿//(c) copyright by Martin M. Klöckener
+using ConsoleAdventure.Utilities;
 
 namespace ConsoleAdventure;
 
@@ -31,14 +32,24 @@ public class Command
         Hidden = hidden;
     }
     
-    public bool ContainsKeyword(string keyword)
+    public bool ContainsKeyword(string userInput)
     {
-        foreach (string k in _keywords)
+        foreach (string keyword in _keywords)
         {
-            if (string.Equals(keyword, k, StringComparison.CurrentCultureIgnoreCase)) return true;
+            if (userInput.Contains(keyword)) return true;
         }
 
         return false;
+    }
+
+    public string RemoveCommandKeyword(string userInput)
+    {
+        foreach (string keyword in _keywords)
+        {
+            if (userInput.Contains(keyword)) return userInput.RemoveFirstOccurence(keyword);
+        }
+
+        return userInput;
     }
 
     public void Execute(List<string> parameters)

@@ -6,32 +6,38 @@ public static class CommandUtilities
 {
     public static bool TryExecuteUserInput(string userInput, List<Command> availableCommands)
     {
-        string lower = userInput.ToLower();
-        List<string> words = lower.SplitIntoWords();
+        userInput = userInput.ToLower();
 
-        //throw new NotImplementedException();
-        
-        foreach (string word in words)
+        //try to find global command in user input
+        foreach (Command command in Game.GlobalCommands)
         {
-            //try to execute the first command that matches a keyword the user entered (start with the global commands)
-            foreach (Command command in Game.GlobalCommands)
-            {
-                if (!command.ContainsKeyword(word)) continue;
-                
-                command.Execute(words);
-                return true;
-            }
+            if (!command.ContainsKeyword(userInput)) continue;
+
+            //remove the command keywords
+            //string userInputWithoutCommand = command.RemoveCommandKeyword(userInput);
+            //find and split parameters
+            List<string> userInputSplitIntoWords = userInput.SplitIntoWords();
             
-            //then do the same for the not global commands
-            foreach (Command command in availableCommands)
-            {
-                if (!command.ContainsKeyword(word)) continue;
-                
-                command.Execute(words);
-                return true;
-            }
+            //execute command
+            command.Execute(userInputSplitIntoWords);
+            return true;
         }
         
+        //try to find non-global command in user input
+        foreach (Command command in availableCommands)
+        {
+            if (!command.ContainsKeyword(userInput)) continue;
+
+            //remove the command keywords
+            //string userInputWithoutCommand = command.RemoveCommandKeyword(userInput);
+            //find and split parameters
+            List<string> userInputSplitIntoWords = userInput.SplitIntoWords();
+            
+            //execute command
+            command.Execute(userInputSplitIntoWords);
+            return true;
+        }
+
         return false;
     }
 
