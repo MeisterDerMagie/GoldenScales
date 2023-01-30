@@ -24,15 +24,19 @@ public class TreasureRoom : Room
         base.Enter();
 
         //add gold
-        int goldAmount = RandomUtilities.RandomInt(40, 105);
+        var rng = new Random();
+        int goldAmount = rng.Next(Constants.TreasureRoomGoldRange.Minimum, Constants.TreasureRoomGoldRange.Maximum);
         Player.Singleton.AddGold(goldAmount, true);
         
         //add random item to the inventory
-        int itemValue = RandomUtilities.RandomInt(30, 90);
-        Item item = ItemFactory.GenerateRandomItem(itemValue);
+        int itemValue = rng.Next(Constants.TreasureRoomItemValueRange.Minimum, Constants.TreasureRoomItemValueRange.Maximum);
+        Item item = ItemFactory.GenerateRandomLootItem(itemValue);
         Player.Singleton.AddToIventory(item, true);
         
         //let player know about loot
         Console.WriteLine($"You search the treasure for valuables and find {goldAmount} gold and a {item.Name}.");
+        
+        //set room to looted
+        HasBeenLooted = true;
     }
 }

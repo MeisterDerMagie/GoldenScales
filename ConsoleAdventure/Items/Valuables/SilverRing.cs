@@ -2,12 +2,12 @@
 
 namespace ConsoleAdventure.Items.Valuables;
 
-public class GoldenFigure : Valuable
+public class SilverRing : Valuable
 {
     public override string StatsShort => $"A valuable item. Value: {GoldValue}";
     public override string StatsFull => $"Name: {Name} \nDescription: {StatsShort} \nValue: {GoldValue}";
     
-    public GoldenFigure(int goldValue) : base("Golden Figure", goldValue + 10)
+    public SilverRing(int goldValue) : base("Silver Ring", goldValue + 5)
     {
         
     }
@@ -15,6 +15,6 @@ public class GoldenFigure : Valuable
 
     public override void Examine()
     {
-        Console.WriteLine("It's a small statue made out of pure gold. It seems to be very valuable but has no other use. You should search for someone who is interested in it.");
+        Console.WriteLine("A small silver ring. A merchant might be interested in it.");
     }
 }

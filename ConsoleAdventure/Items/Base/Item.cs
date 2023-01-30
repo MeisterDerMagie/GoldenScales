@@ -10,7 +10,6 @@ public abstract class Item
     public abstract string StatsFull { get; }
     public bool Equippable => this is Equippable;
     public bool Consumable => this is Consumable;
-    public string Keyword => Name;
     
     
     protected Item(string name, int goldValue)

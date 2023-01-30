@@ -50,16 +50,16 @@ public class ChestRoom : Room
         var rng = new Random();
         int goldValue = rng.Next(Constants.ChestValueRange.Minimum, Constants.ChestValueRange.Maximum + 1);
 
-        Item randomItem = ItemUtilities.GenerateRandomItem(goldValue);
+        Item randomItem = ItemFactory.GenerateRandomLootItem(goldValue);
         
         //feedback
         string valueFeedback = string.Empty;
         if (goldValue == Constants.ChestValueRange.Minimum)
-            valueFeedback = "It looks pretty shabby. Who keeps something like this in an ornate chest?";
+            valueFeedback = (randomItem is Consumable) ? "It won't be of much use, but at least it's better than nothing." :"It looks pretty shabby. Who keeps something like this in an ornate chest?";
         else if (goldValue - Constants.ChestValueRange.Minimum <= (Constants.ChestValueRange.Maximum - Constants.ChestValueRange.Minimum) / 2f)
-            valueFeedback = "It doesn't look particularly valuable, but you'll certainly find a use for it.";
+            valueFeedback = (randomItem is Consumable) ? "You'll be able to put that to good use." : "It doesn't look particularly valuable, but you'll certainly find a use for it.";
         else if (goldValue < Constants.ChestValueRange.Maximum)
-            valueFeedback = "It looks reasonably valuable. Good for you that someone stashed this item here!";
+            valueFeedback = (randomItem is Consumable) ? "That is useful! Good for you that someone stashed this item here!" : "It looks reasonably valuable. Good for you that someone stashed this item here!";
         else
             valueFeedback = "Awesome, this is a valuable item! Luck was with you. Hopefully you can put the item to good use or sell it for a decent sum.";
         

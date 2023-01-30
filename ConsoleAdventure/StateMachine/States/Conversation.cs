@@ -2,12 +2,12 @@
 
 namespace ConsoleAdventure;
 
-public class Dialog : IState
+public class Conversation : IState
 {
     public List<Command> AvailableCommands { get; set; }
     public string TextWhenReturningToThisState => "You continue your conversation with NPC-NAME.";
 
-    public Dialog()
+    public Conversation()
     {
         AvailableCommands = new List<Command>();
     }

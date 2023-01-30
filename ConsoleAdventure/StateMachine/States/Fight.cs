@@ -41,11 +41,16 @@ public class Fight : IState
 
     public void OnExit()
     {
-        throw new NotImplementedException();
+        
     }
 
     private void AddFightCommands()
     {
+        //for debugging
+        _player.DealDamage(30);
+        Game.StateMachine.SetState(Game.ExplorationState);
+        return;
+        
         throw new NotImplementedException();
     }
 }

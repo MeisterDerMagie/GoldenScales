@@ -47,13 +47,15 @@ public class SearchInventory : IState
         var listItemsCommand = new Command("list items (lists all items in your invenory)", new List<string> { "list items", "list inventory" }, ListItems);
         var examineCommand = new Command("examine + item # (e.g. \"examine 2\" Examine an item and learn more about its stats)", new List<string> { "examine" }, ExamineItem);
         var equipCommand = new Command("equip + item # (e.g. \"equip 2\" Equip an item)", new List<string> { "equip" }, EquipItem);
-        var consumeCommand = new Command("user/eat/drink  + item # (consume an item that's in your inventory, e.g. \"drink 2\")", new List<string> { "consume", "drink", "eat", "use" }, ConsumeItem);
+        var consumeCommand = new Command("use/eat/drink  + item # (consume an item that's in your inventory, e.g. \"drink 2\")", new List<string> { "consume", "drink", "eat", "use" }, ConsumeItem);
+        var statsCommand = new Command("stats + item # (show the detailed stats of an item)", new List<string> { "stats" }, DisplayItemStats);
 
         AvailableCommands.Add(closeInventoryCommand);
         AvailableCommands.Add(listItemsCommand);
         AvailableCommands.Add(examineCommand);
         AvailableCommands.Add(equipCommand);
         AvailableCommands.Add(consumeCommand);
+        AvailableCommands.Add(statsCommand);
     }
 
     private void ListItems()
@@ -154,5 +156,20 @@ public class SearchInventory : IState
         }
         
         Player.Singleton.Inventory.Remove(item);
+    }
+
+    private void DisplayItemStats(List<string> userParameters)
+    {
+        //try to get the item that the player wants to show stats of
+        Item item = StringParser.InventoryItemFromString(userParameters);
+        if (item == null)
+        {
+            Console.WriteLine("Which item do you want to see the stats of? Please type in the form of \"stats 2\", where 2 is the item number in the inventory (type \"list items\" to list all your items).");
+            return;
+        }
+        
+        //if we managed to get the item, show stats
+        Console.WriteLine($"Stats of item #{Player.Singleton.Inventory.IndexOf(item) + 1}:");
+        Console.WriteLine(item.StatsFull);
     }
 }

@@ -1,5 +1,6 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using ConsoleAdventure.Items;
 using ConsoleAdventure.Utilities;
 
 namespace ConsoleAdventure;
@@ -39,14 +40,6 @@ public class Game
 
         StateMachine.SetState(ExplorationState);
 
-        //add items to inventory
-        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(12));
-        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(45));
-        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
-        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
-        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
-        Player.Singleton.AddToIventory(ItemUtilities.GenerateRandomItem(28));
-        
         //Start Game Loop
         GameLoop();
     }
@@ -66,9 +59,9 @@ public class Game
         var gameCommands = new List<Command>();
 
         var helpCommand = new Command("options (list all available commands)", new List<string> { "help", "options", "commands", "actions" }, ListAvailableCommands, true);
-        var quitCommand = new Command("quit (quit the game)", new List<string> { "quit", "q", "exit" }, Quit);
+        var quitCommand = new Command("quit game (quit the game)", new List<string> { "quit game" }, Quit);
         var restartCommand = new Command("restart (start a new game)", new List<string> { "restart" }, Restart);
-        var showHealthCommand = new Command("health (show your current health)", new List<string> { "health", "hp" }, () => Console.WriteLine($"Your current health is {Player.Singleton.Health}."));
+        var showHealthCommand = new Command("health (show your current health)", new List<string> { "health" }, () => Console.WriteLine($"Your current health is {Player.Singleton.Health}."));
 
         gameCommands.Add(helpCommand);
         gameCommands.Add(quitCommand);
