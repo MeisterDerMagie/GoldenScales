@@ -11,4 +11,9 @@ public class Trader : NPC
     {
         Inventory = inventory;
     }
+
+    public Trader(string name, List<Item> inventory) : base(name)
+    {
+        Inventory = inventory;
+    }
 }

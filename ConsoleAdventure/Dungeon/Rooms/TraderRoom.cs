@@ -1,7 +1,6 @@
 ﻿//(c) copyright by Martin M. Klöckener
 using ConsoleAdventure.Items;
 using ConsoleAdventure.NPCs;
-// ReSharper disable InconsistentNaming
 
 namespace ConsoleAdventure.Rooms;
 
@@ -15,14 +14,6 @@ public class TraderRoom : Room
 
     public TraderRoom(RoomPosition position) : base("Trader Room", position)
     {
-        //create trader dialog
-        string name = NPCNames.GetRandomNPCName();
-
-        var dialog = new DialogNode("NONE", $"Welcome, my good fellow! I am {name}, what can I serve you with?", null);
-        DialogNode Node_1_1 = dialog.AddChild( "What are you doing down here? I can hardly imagine that many customers come by here. Wouldn't you be better off selling your goods at the market in town?", 
-                                                "Well, you're down here too. You wouldn't believe how many \"adventurers\" are hot for the treasure of the lindworm. And so far, no one has been able to defeat him. That means there's a lot of valuables accumulating down here over time, if you know what I mean.... The business is filthier than a market stall, but all the more rewarding because there is less competition.");
-        //DialogNode Node_1_2 = dialog.AddChild();
-        
         //generate inventory
         var inventory = new List<Item>();
         var rng = new Random();
@@ -34,13 +25,22 @@ public class TraderRoom : Room
             Item item = ItemFactory.GenerateRandomTraderItem(itemValue);
             inventory.Add(item);
         }
+        
+        //create trader
+        string name = NPCNames.GetRandomNPCName();
+        _trader = new Trader(name, inventory);
 
-        _trader = new Trader(name, dialog, inventory);
+        //create dialog
+        DialogNode dialog = DialogFactory.GetTraderDialog(_trader);
+        _trader.SetDialog(dialog);
     }
 
     public override void Enter()
     {
         base.Enter();
-        throw new NotImplementedException();
+
+        //start dialog
+        var dialogState = new Dialog(_trader);
+        Game.StateMachine.SetState(dialogState);
     }
 }
