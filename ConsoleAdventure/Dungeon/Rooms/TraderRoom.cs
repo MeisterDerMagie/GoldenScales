@@ -14,6 +14,10 @@ public class TraderRoom : Room
 
     public TraderRoom(RoomPosition position) : base("Trader Room", position)
     {
+        //add room commands
+        var talkCommand = new Command("talk (talk to the trader)", new List<string> { "talk", "trade"}, StartDialog);
+        RoomCommands.Add(talkCommand);
+        
         //generate inventory
         var inventory = new List<Item>();
         var rng = new Random();
@@ -40,6 +44,11 @@ public class TraderRoom : Room
         base.Enter();
 
         //start dialog
+        StartDialog();
+    }
+
+    private void StartDialog()
+    {
         var dialogState = new Dialog(_trader);
         Game.StateMachine.SetState(dialogState);
     }

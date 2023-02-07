@@ -16,7 +16,13 @@ public class DialogFactory
         DialogNode node_1_2 = dialog.AddChild(
             "Let's get straight to the business. I want to trade with you.",
             "That's the way I like it. Here are my goods.",
+            "Trade",
             () => Game.StateMachine.SetState(new Trade(trader)));
+        DialogNode node_1_3 = dialog.AddChild(
+            "Enough talk. I'm going to continue exploring the dungeon. See you around.",
+            "Alright. You know where to find me if you want to get rid of some gold coins.",
+            "Leave",
+            () => Game.StateMachine.SetState(Game.ExplorationState, false));
         DialogNode node_1_1_1 = node_1_1.AddChild(
             "Isn't it depressing to spend all day down here among rats, mold and death?",
             "You get used to it. At least I find it more bearable than being annoyed by gossip at the market.");
@@ -29,18 +35,21 @@ public class DialogFactory
         DialogNode node_1_1_1_2_1 = node_1_1_1_2.AddChild(
             "Yes, yes, all right. Show me your goods.",
             "With pleasure!",
+            "Trade",
             () => Game.StateMachine.SetState(new Trade(trader)));
         DialogNode node_1_1_1_2_2 = node_1_1_1_2.AddChild(
             "No thank you, I dont't want to trade right now. Good bye!",
             "Too bad! Be careful down here.",
-            () => Game.StateMachine.SetState(Game.ExplorationState, false));
+            enterAction: () => Game.StateMachine.SetState(Game.ExplorationState, false));
         DialogNode node_1_1_1_1_1 = node_1_1_1_1.AddChild(
             "Yes, yes, all right. Show me your goods.",
             "With pleasure!",
+            "Trade",
             () => Game.StateMachine.SetState(new Trade(trader)));
         DialogNode node_1_1_1_1_2 = node_1_1_1_1.AddChild(
             "No thank you, I dont't want to trade right now. Good bye!",
             "Too bad! Be careful down here.",
+            "Leave",
             () => Game.StateMachine.SetState(Game.ExplorationState, false));
         DialogNode node_1_1_2 = node_1_1.AddChild(
             "How do you actually get to work in the morning? Your way to work is full of skeletons, spiders and traps.",
@@ -49,12 +58,14 @@ public class DialogFactory
             "Invisibility Potion? Why don't you just steal the Lindworm's treasure and lay low for the rest of your life?",
             "Ha, if it were that easy! I would have been lying in the sun on the Azur Islands long ago. The lindworm notices every little movement, so an invisibility potion isn't of much use. Believe me, I've tried. I survived the attempt by a hair's breadth.");
         DialogNode node_1_1_2_1_1 = node_1_1_2_1.AddChild(
-            "Okay, enough rambling. Let's trade.",
-            "That's the way I like it. Here are my goods.",
+            "Phew, lucky! Were you able to steal at least a few things from the treasure? Let me take a look at your goods!",
+            "Indeed. I was able to take one or two valuable pieces with me. Have a look at them!",
+            "Trade",
             () => Game.StateMachine.SetState(new Trade(trader)));
         DialogNode node_1_1_2_1_2 = node_1_1_2_1.AddChild(
-            "Phew, lucky! Were you able to steal at least a few things from the treasure? Let me take a look at your goods!",
-            "All right, thanks for the warning! I will be careful. Good bye!",
+            "All right, thanks for the warning! I will be careful.",
+            "Good luck and take care!",
+            "Leave",
             () => Game.StateMachine.SetState(Game.ExplorationState));
 
         return dialog;

@@ -56,7 +56,7 @@ public class Dialog : IState
         for (int i = 1; i < _currentNode.Children.Count + 1; i++)
         {
             int optionIndex = i;
-            AvailableCommands.Add(new Command($"{i} (pick this number to answer with option {i})", new List<string>{$"{i}"}, () => PickOption(optionIndex)));
+            AvailableCommands.Add(new Command($"{i} (pick this number to answer with option {i})", new List<string>{$"{i}", $"{_currentNode.Children[i-1].ActionDescription}"}, () => PickOption(optionIndex)));
         }
     }
 

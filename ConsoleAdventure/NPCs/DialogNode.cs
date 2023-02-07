@@ -9,6 +9,7 @@ public class DialogNode
     public List<DialogNode> Children = new();
 
     public string Option { get; }
+    public string ActionDescription { get; }
 
     private string Answer { get; }
     private Action EnterAction { get; }
@@ -36,21 +37,22 @@ public class DialogNode
     {
         for (int i = 0; i < Children.Count; i++)
         {
-            Console.WriteLine($"{i + 1}: {Children[i].Option}");
+            Console.WriteLine($"{i + 1}: {(Children[i].ActionDescription == string.Empty ? string.Empty : $"[{Children[i].ActionDescription}] ")}{Children[i].Option}");
         }
     }
-
-    public DialogNode(string option, string answer, DialogNode parent, Action enterAction = null)
+    
+    public DialogNode(string option, string answer, DialogNode parent, string actionDescription = "", Action enterAction = null)
     {
         Option = option;
         Answer = answer;
         Parent = parent;
+        ActionDescription = actionDescription;
         EnterAction = enterAction;
     }
 
-    public DialogNode AddChild(string option, string answer, Action enterAction = null)
+    public DialogNode AddChild(string option, string answer, string actionDescription = "", Action enterAction = null)
     {
-        var child = new DialogNode(option, answer, this, enterAction);
+        var child = new DialogNode(option, answer, this, actionDescription, enterAction);
         Children.Add(child);
         return child;
     }

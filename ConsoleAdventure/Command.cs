@@ -30,6 +30,12 @@ public class Command
         _actionWithoutParameter = action;
         _hasParameters = false;
         Hidden = hidden;
+        
+        //remove empty and duplicate keywords
+        _keywords = _keywords.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
+        
+        //make keywords to lower characters
+        _keywords = _keywords.ConvertAll(s => s.ToLower());
     }
     
     public bool ContainsKeyword(string userInput)
