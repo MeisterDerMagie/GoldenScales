@@ -1,5 +1,4 @@
 ﻿//(c) copyright by Martin M. Klöckener
-
 using ConsoleAdventure.DataTypes;
 using ConsoleAdventure.Rooms;
 using ConsoleAdventure.Utilities;

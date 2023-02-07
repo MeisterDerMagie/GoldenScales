@@ -16,7 +16,9 @@ public class TraderRoom : Room
     {
         //add room commands
         var talkCommand = new Command("talk (talk to the trader)", new List<string> { "talk", "trade"}, StartDialog);
+        var attackComand = new Command("attack", new List<string> { "attack", "kill" }, AttackTrader, true);
         RoomCommands.Add(talkCommand);
+        RoomCommands.Add(attackComand);
         
         //generate inventory
         var inventory = new List<Item>();
@@ -51,5 +53,11 @@ public class TraderRoom : Room
     {
         var dialogState = new Dialog(_trader);
         Game.StateMachine.SetState(dialogState);
+    }
+
+    private void AttackTrader()
+    {
+        Console.WriteLine("In a burst of madness, you attack the merchant. Reflexively, he pulls a chain hanging on the wall behind him. Before you know it, a huge boulder crashes out of the ceiling and crushes you. Apparently, the merchant knew exactly what kind of shady people he would have to deal with down here...");
+        Player.Singleton.DealDamage(100);
     }
 }

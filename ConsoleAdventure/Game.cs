@@ -1,5 +1,4 @@
 ﻿//(c) copyright by Martin M. Klöckener
-
 using ConsoleAdventure.Items;
 using ConsoleAdventure.Utilities;
 
@@ -13,8 +12,13 @@ public class Game
     public static StateMachine StateMachine = new StateMachine();
     public static Explore ExplorationState;
 
+    public static Game Singleton;
+
     public Game(int seed)
     {
+        //singleton
+        Singleton = this;
+        
         //generate dungeon
         Dungeon dungeon = DungeonGenerator.Generate( 25, 15, seed);
         
@@ -39,6 +43,13 @@ public class Game
         ExplorationState = new Explore(dungeon, player, dungeonNavigation);
 
         StateMachine.SetState(ExplorationState);
+        
+        
+        //
+        Player.Singleton.AddToIventory(ItemFactory.GenerateRandomLootItem(15));
+        Player.Singleton.AddToIventory(ItemFactory.GenerateRandomLootItem(15));
+        Player.Singleton.AddToIventory(ItemFactory.GenerateRandomLootItem(15));
+        //
 
         //Start Game Loop
         GameLoop();
@@ -50,6 +61,9 @@ public class Game
         {
             StateMachine.Tick();
         }
+        
+        bool startNewGame = ConsoleUtilities.InputBoolean("\nWould you like to try your luck again and descend into the dark depths?");
+        if(!startNewGame) Environment.Exit(0);
     }
 
     private void ListAvailableCommands() => CommandUtilities.ListAvailableCommands(StateMachine.CurrentState.AvailableCommands);
@@ -75,9 +89,11 @@ public class Game
     {
         var cheatCommands = new List<Command>();
         
-        var mapFull = new Command("mapFull (show the full map, not just the dicovered area)", new List<string> {"mapFull"}, () => Map.Draw(dungeon, Player.Singleton, false), true);
+        var mapFull = new Command("marco polo (show the full map, not just the dicovered area)", new List<string> {"marco polo"}, () => Map.Draw(dungeon, Player.Singleton, false), true);
+        var richKid = new Command("rich kid (add a loooot of money to your inventory)", new List<string> { "i am a rich kid" }, () => Player.Singleton.AddGold(1000000), true);
         
         cheatCommands.Add(mapFull);
+        cheatCommands.Add(richKid);
         
         GlobalCommands.AddRange(cheatCommands);
     }

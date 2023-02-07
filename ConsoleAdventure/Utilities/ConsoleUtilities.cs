@@ -51,7 +51,7 @@ public static class ConsoleUtilities
         }
     }
 
-    public static int InputInteger(string question, bool positiveOnly = true, bool allowZero = true)
+    public static int InputInteger(string question, int minValue = int.MinValue, int maxValue = int.MaxValue, bool positiveOnly = true, bool allowZero = true)
     {
         while (true)
         {
@@ -64,7 +64,13 @@ public static class ConsoleUtilities
 
             if (!int.TryParse(userInput, out int ret))
             {
-                Console.WriteLine("Please enter a valid integer.");
+                Console.WriteLine("Please enter a valid number.");
+                continue;
+            }
+
+            if (ret > maxValue || ret < minValue)
+            {
+                Console.WriteLine($"Please enter a number between {minValue} and {maxValue} (inclusive).");
                 continue;
             }
 

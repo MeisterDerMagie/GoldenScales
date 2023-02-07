@@ -4,7 +4,7 @@ namespace ConsoleAdventure.Items.Valuables;
 
 public class GoldenFigure : Valuable
 {
-    public override string StatsShort => $"A valuable item. Value: {GoldValue}";
+    public override string StatsShort => $"A valuable item.";
     public override string StatsFull => $"Name: {Name} \nDescription: {StatsShort} \nValue: {GoldValue}";
     
     public GoldenFigure(int goldValue) : base("Golden Figure", goldValue + 10)

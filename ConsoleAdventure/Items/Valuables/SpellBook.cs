@@ -4,7 +4,7 @@ namespace ConsoleAdventure.Items.Valuables;
 
 public class SpellBook : Valuable
 {
-    public override string StatsShort => $"A valuable item. Value: {GoldValue}";
+    public override string StatsShort => $"A valuable item.";
     public override string StatsFull => $"Name: {Name} \nDescription: {StatsShort} \nValue: {GoldValue}";
     
     public SpellBook(int goldValue) : base("Spellbook", goldValue + 5)

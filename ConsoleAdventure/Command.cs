@@ -1,4 +1,5 @@
 ﻿//(c) copyright by Martin M. Klöckener
+using System.Text.RegularExpressions;
 using ConsoleAdventure.Utilities;
 
 namespace ConsoleAdventure;
@@ -42,20 +43,12 @@ public class Command
     {
         foreach (string keyword in _keywords)
         {
-            if (userInput.Contains(keyword)) return true;
+            //if the userInput contains the keyword, return true (only checks for whole words, see: https://stackoverflow.com/questions/31073799/get-only-whole-words-from-a-contains-statement)
+            bool foundMatchingKeyword = Regex.Match(userInput, @$"\b{Regex.Escape(keyword)}\b", RegexOptions.IgnoreCase).Success;
+            if (foundMatchingKeyword) return true;
         }
 
         return false;
-    }
-
-    public string RemoveCommandKeyword(string userInput)
-    {
-        foreach (string keyword in _keywords)
-        {
-            if (userInput.Contains(keyword)) return userInput.RemoveFirstOccurence(keyword);
-        }
-
-        return userInput;
     }
 
     public void Execute(List<string> parameters)

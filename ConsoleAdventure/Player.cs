@@ -41,10 +41,15 @@ public class Player : IDamageable
         return (Gold >= amount);
     }
 
-    public void RemoveGold(int amount)
+    public void RemoveGold(int amount, bool silently = false)
     {
         Gold -= amount;
-        Console.WriteLine("Your purse is now ");
+        if(!silently) Console.WriteLine($"You have {Gold} left gold in your purse.");
+    }
+
+    public void PrintPurse()
+    {
+        Console.WriteLine($"You have {Gold} gold in your purse.");
     }
     #endregion
 
@@ -53,6 +58,19 @@ public class Player : IDamageable
     {
         Inventory.Add(item);
         if(!silently) Console.WriteLine($"You add {item.Name} to your inventory.");
+    }
+
+    public bool RemoveFromInventory(Item item, bool silently = false)
+    {
+        if (!Inventory.Contains(item))
+        {
+            Console.WriteLine("ERROR: Can't remove item item from player inventory because the inventory doesn't contain it.");
+            return false;
+        }
+
+        Inventory.Remove(item);
+        if(!silently) Console.WriteLine($"You remove {item.Name} from your inventory.");
+        return true;
     }
 
     public void OpenInventory()
@@ -196,5 +214,6 @@ public class Player : IDamageable
     private void Die()
     {
         Console.WriteLine("You died. The adventure is over.");
+        Game.Singleton.GameHasEnded = true;
     }
 }
