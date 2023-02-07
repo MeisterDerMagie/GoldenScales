@@ -26,6 +26,7 @@ public class Player : IDamageable
     
     public List<Item> Inventory = new();
     public Dictionary<EquipSlot, Equippable> EquippedItems;
+    public int TotalArmorProtection => CalculateTotalProtection();
 
     public static Player Singleton;
 
@@ -67,9 +68,18 @@ public class Player : IDamageable
             Console.WriteLine("ERROR: Can't remove item item from player inventory because the inventory doesn't contain it.");
             return false;
         }
+        
+        //unequip if equipped
+        bool isEquipped = (item is Equippable equippable && equippable.IsEquipped);
+        if (isEquipped) UnEquip(item, true);
 
+        //remove
         Inventory.Remove(item);
-        if(!silently) Console.WriteLine($"You remove {item.Name} from your inventory.");
+        if (!silently)
+        {
+            string output = isEquipped ? $"You unequip {item.Name} and them remove it from your inventory." : $"You remove {item.Name} from your inventory." ;
+            Console.WriteLine(output);
+        }
         return true;
     }
 
@@ -121,14 +131,11 @@ public class Player : IDamageable
             bool playerWantsToUnequip = ConsoleUtilities.InputBoolean($"There already is an item equipped at the {item.EquipSlot.ToString()} slot. Do you want to unequip it and equip the new item instead?");
             if (!playerWantsToUnequip)
             {
-                Console.WriteLine("You decided not to equip the item.");
+                Console.WriteLine("You decide not to equip the item.");
                 return false;
             }
             
-            //unequip
-            AddToIventory(EquippedItems[item.EquipSlot], true);
-            
-            //then equip new item
+            //equip new item
             EquippedItems[item.EquipSlot] = item;
             return true;
         }
@@ -136,25 +143,50 @@ public class Player : IDamageable
 
     public bool UnEquip(Item item, bool silently = false)
     {
-        throw new NotImplementedException();
+        if (item is not Equippable equippable)
+        {
+            Console.WriteLine($"Can't unequip {item.Name} because it's not equippable.");
+            return false;
+        }
+
+        if (!equippable.IsEquipped)
+        {
+            Console.WriteLine($"You can't unequip {item.Name} because it's not equipped.");
+            return false;
+        }
+
+        return UnEquip(equippable.EquipSlot, silently);
     }
 
-    public void UnEquip(EquipSlot slot, bool silently = false)
+    public bool UnEquip(EquipSlot slot, bool silently = false)
     {
         if (EquippedItems[slot] == null)
         {
             if(!silently)
                 Console.WriteLine($"Can't unequip the {slot.ToString()} slot because there is no item equipped.");
-            return;
+            return false;
         }
 
         Item equippedItem = EquippedItems[slot];
         
-        AddToIventory(equippedItem, true);
         EquippedItems[slot] = null;
         
         if (!silently)
             Console.WriteLine($"You unequipped the {equippedItem.Name}.");
+
+        return true;
+    }
+
+    private int CalculateTotalProtection()
+    {
+        int totalProtection = 0;
+        foreach (KeyValuePair<EquipSlot,Equippable> equippedItem in EquippedItems)
+        {
+            if (equippedItem.Value is not Armor armor) continue;
+            totalProtection += armor.Protection;
+        }
+
+        return totalProtection;
     }
     #endregion
     

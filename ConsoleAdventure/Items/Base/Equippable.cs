@@ -5,13 +5,20 @@ namespace ConsoleAdventure.Items;
 public abstract class Equippable : Item
 {
     public EquipSlot EquipSlot { get; }
+    public bool IsEquipped => CheckIfEquipped();
     
     protected Equippable(string name, int goldValue, EquipSlot slot) : base(name, goldValue)
     {
         EquipSlot = slot;
     }
 
-    public abstract void Equip();
+    private bool CheckIfEquipped()
+    {
+        foreach (KeyValuePair<EquipSlot, Equippable> equippedItem in Player.Singleton.EquippedItems)
+        {
+            if (equippedItem.Value == this) return true;
+        }
 
-    public abstract void UnEquip();
+        return false;
+    }
 }

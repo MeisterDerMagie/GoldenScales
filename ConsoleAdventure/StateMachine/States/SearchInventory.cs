@@ -47,6 +47,7 @@ public class SearchInventory : IState
         var listItemsCommand = new Command("list items (lists all items in your invenory)", new List<string> { "list items", "list inventory" }, () => InventoryUtilities.PrintPlayerInventory(Player.Singleton));
         var examineCommand = new Command("examine + item # (Examine an item and learn more about its stats, e.g. \"examine 2\")", new List<string> { "examine" }, ExamineItem);
         var equipCommand = new Command("equip + item # (Equip an item, e.g. \"equip 2\")", new List<string> { "equip" }, EquipItem);
+        var unequipCommand = new Command("unequip + item # (Unequip an item, e.g. \"unequip 2\")", new List<string>{"unequip"}, UnEquipItem);
         var consumeCommand = new Command("use/eat/drink  + item # (consume an item that's in your inventory, e.g. \"drink 2\")", new List<string> { "consume", "drink", "eat", "use" }, ConsumeItem);
         var statsCommand = new Command("stats + item # (show the detailed stats of an item)", new List<string> { "stats" }, DisplayItemStats);
 
@@ -54,6 +55,7 @@ public class SearchInventory : IState
         AvailableCommands.Add(listItemsCommand);
         AvailableCommands.Add(examineCommand);
         AvailableCommands.Add(equipCommand);
+        AvailableCommands.Add(unequipCommand);
         AvailableCommands.Add(consumeCommand);
         AvailableCommands.Add(statsCommand);
     }
@@ -99,9 +101,29 @@ public class SearchInventory : IState
         }
     }
 
-    private void UnEquipItem(Item item)
+    private void UnEquipItem(List<string> userParameters)
     {
+        //try to get the item that the player wants to unequip
+        (Item item, int itemNumber) = StringParser.InventoryItemFromString(userParameters, Player.Singleton.Inventory);
         
+        if (item == null)
+        {
+            Console.WriteLine("Which item do you want to unequip? Please type in the form of \"unequip 2\", where 2 is the item number in the inventory (type \"list items\" to list all your items).");
+            return;
+        }
+        
+        //if we managed to get the item, check if it's equippable and equipped
+        if (item is not Equippable equippable || !equippable.IsEquipped)
+        {
+            Console.WriteLine($"You can't unequip the item {item.Name} (#{itemNumber.ToString()}) because it's not equipped.");
+            return;
+        }
+        
+        //if it's equippable and equipped, unequip it
+        if (Player.Singleton.UnEquip(item))
+        {
+            Console.WriteLine($"You unequip your {item.Name} (#{itemNumber.ToString()}).");
+        }
     }
 
     private void ConsumeItem(List<string> userParameters)

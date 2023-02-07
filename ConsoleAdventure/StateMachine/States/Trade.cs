@@ -120,12 +120,26 @@ public class Trade : IState
             return;
         }
         
-        //if we managed to get the item, sell it
+        //if the item is equipped: ask player if they really want to sell it
+        var equippable = item as Equippable;
+        bool isEquipped = (equippable != null && equippable.IsEquipped);
+        if (isEquipped)
+        {
+            bool reallyUnequip = ConsoleUtilities.InputBoolean($"The item you want to sell is currently equipped at the {equippable.EquipSlot.ToString()} slot. Do you really want to sell it?");
+            if (!reallyUnequip)
+            {
+                Console.WriteLine($"You don't sell your {item.Name}.");
+                return;
+            }
+        }
+            
+        //if we managed to get the item, sell it (and unequipp it, if it was equipped)
         if (Player.Singleton.RemoveFromInventory(item, true))
         {
             Player.Singleton.AddGold(item.GoldValue, true);
             _trader.Inventory.Add(item);
-            Console.WriteLine($"You sell {item.Name} for {item.GoldValue} gold and now have a total of {Player.Singleton.Gold} gold in your purse.");
+            string unequipText = isEquipped ? "unequip and " : string.Empty;
+            Console.WriteLine($"You {unequipText}sell the {item.Name} for {item.GoldValue} gold and now have a total of {Player.Singleton.Gold} gold in your purse.");
         }
     }
 

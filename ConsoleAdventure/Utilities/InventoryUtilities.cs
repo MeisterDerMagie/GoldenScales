@@ -52,8 +52,10 @@ public static class InventoryUtilities
             int itemNumber = i + 1;
             Item item = inventory[i];
 
+            bool isEquipped = (item is Equippable equippable && equippable.IsEquipped);
+            string equipped = isEquipped ? "[equipped] " : string.Empty;
             string goldValue = showGoldValue ? $"[{goldValuePrefix} {item.GoldValue}]" : string.Empty;
-            string itemString = $"#{itemNumber}: {item.Name} {goldValue} ({item.StatsShort})";
+            string itemString = $"#{itemNumber}: {equipped}{item.Name} {goldValue} ({item.StatsShort})";
             Console.WriteLine(itemString);
         }
     }
