@@ -23,6 +23,8 @@ public class TreasureRoom : Room
     {
         base.Enter();
 
+        if (HasBeenLooted) return;
+
         //add gold
         var rng = new Random();
         int goldAmount = rng.Next(Constants.TreasureRoomGoldRange.Minimum, Constants.TreasureRoomGoldRange.Maximum);

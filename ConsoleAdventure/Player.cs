@@ -1,6 +1,9 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using ConsoleAdventure.DataTypes;
 using ConsoleAdventure.Items;
+using ConsoleAdventure.Items.Consumables;
+using ConsoleAdventure.Items.Weapons;
 using ConsoleAdventure.Utilities;
 
 namespace ConsoleAdventure;
@@ -30,6 +33,27 @@ public class Player : IDamageable
 
     public static Player Singleton;
 
+    public Player(string name, int maxHealth, Room startingRoom)
+    {
+        CurrentRoom = startingRoom;
+        Name = name;
+        MaxHealth = maxHealth;
+        Health = maxHealth;
+        
+        //set up equippedItems dictionary
+        EquippedItems = new Dictionary<EquipSlot, Equippable>();
+        foreach (EquipSlot equipSlot in Enum.GetValues<EquipSlot>())
+        {
+            EquippedItems.Add(equipSlot, null);
+        }
+        
+        //give starting equipment
+        GiveStartingEquipment();
+        
+        //pseudo singleton
+        Singleton = this;
+    }
+    
     #region Gold
     public void AddGold(int amount, bool silently = false)
     {
@@ -112,6 +136,12 @@ public class Player : IDamageable
             Console.WriteLine("ERROR: Item to equip can't be null.");
             return false;
         }
+
+        if (!Inventory.Contains(item))
+        {
+            Console.WriteLine($"You can't equip {item.Name} because it's not in your inventory. Don't try to equip stuff you don't own, you little rascal!");
+            return false;
+        }
         
         if (!item.Equippable)
         {
@@ -128,6 +158,12 @@ public class Player : IDamageable
         }
         else
         {
+            if (EquippedItems[item.EquipSlot] == item)
+            {
+                Console.WriteLine($"{item.Name} is already equipped!");
+                return false;
+            }
+            
             bool playerWantsToUnequip = ConsoleUtilities.InputBoolean($"There already is an item equipped at the {item.EquipSlot.ToString()} slot. Do you want to unequip it and equip the new item instead?");
             if (!playerWantsToUnequip)
             {
@@ -188,26 +224,25 @@ public class Player : IDamageable
 
         return totalProtection;
     }
-    #endregion
-    
-    public Player(string name, int maxHealth, Room startingRoom)
-    {
-        CurrentRoom = startingRoom;
-        Name = name;
-        MaxHealth = maxHealth;
-        Health = maxHealth;
-        
-        //set up equippedItems dictionary
-        EquippedItems = new Dictionary<EquipSlot, Equippable>();
-        foreach (EquipSlot equipSlot in Enum.GetValues<EquipSlot>())
-        {
-            EquippedItems.Add(equipSlot, null);
-        }
-        
-        //pseudo singleton
-        Singleton = this;
-    }
 
+    private void GiveStartingEquipment()
+    {
+        var smallHealthPotion = new SmallHealthPotion();
+        var mediumHealthPotion = new MediumHealthPotion();
+        var knife = new Knife(4, new Range<int>(3, 6), 0.05f, 2, 2);
+        var jacket = new Jacket(3, 2);
+        
+        AddToIventory(smallHealthPotion, true);
+        AddToIventory(mediumHealthPotion, true);
+        AddToIventory(knife, true);
+        AddToIventory(jacket, true);
+        
+        Equip(knife);
+        Equip(jacket);
+    }
+    #endregion
+
+    #region Health
     public void DealDamage(int amount)
     {
         Health -= amount;
@@ -248,4 +283,5 @@ public class Player : IDamageable
         Console.WriteLine("You died. The adventure is over.");
         Game.Singleton.GameHasEnded = true;
     }
+    #endregion
 }

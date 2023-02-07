@@ -1,16 +1,18 @@
-﻿using ConsoleAdventure.DataTypes;
+﻿using System.Text;
+using ConsoleAdventure.DataTypes;
 
 namespace ConsoleAdventure.Items;
 
 public abstract class Weapon : Equippable
 {
+    public override string StatsFull => GetFullStats();
     public Range<int> BaseDamage { get; }
     public float CritChance { get; }
     public float CritMultiplier { get; }
     public float AttackDuration { get; }
     public float Dps => CalculateDps();
 
-    protected Weapon(string name, int goldValue, Range<int> baseDamage, float critChance, float attackDuration, float critMultiplier) : base(name, goldValue, EquipSlot.Weapon)
+    protected Weapon(string name, int goldValue, Range<int> baseDamage, float critChance, float critMultiplier, float attackDuration) : base(name, goldValue, EquipSlot.Weapon)
     {
         BaseDamage = baseDamage;
         CritChance = critChance;
@@ -28,5 +30,21 @@ public abstract class Weapon : Equippable
         float damagePerSecond = fullDamagePerAttack / AttackDuration;
 
         return damagePerSecond;
+    }
+
+    private string GetFullStats()
+    {
+        var fullStats = new StringBuilder();
+
+        fullStats.AppendLine($"Name: {Name}");
+        fullStats.AppendLine($"Description: {StatsShort}");
+        fullStats.AppendLine($"Base Damage: {BaseDamage.Minimum}-{BaseDamage.Maximum}");
+        fullStats.AppendLine($"Crit Chance: {CritChance*100}%");
+        fullStats.AppendLine($"Crit Multiplier: x{CritMultiplier}");
+        fullStats.AppendLine($"Attack Duration: {AttackDuration} seconds");
+        fullStats.AppendLine($"Value: {GoldValue}");
+        fullStats.AppendLine($"Equipped: {(IsEquipped ? "yes" : "no")}");
+
+        return fullStats.ToString();
     }
 }
