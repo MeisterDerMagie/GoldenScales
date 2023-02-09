@@ -267,7 +267,10 @@ public class Player : IDamageable
         Health -= finalAmount;
 
         if (TotalArmorProtection > 0)
-            Console.WriteLine($"You receive {amount} damage but your armor can block {amount - finalAmount} ({100f/amount * (amount-finalAmount)}%) of it, so you only receive {finalAmount}. You now have {Health} health.");
+            Console.WriteLine(
+                finalAmount == 0
+                    ? $"You receive {amount} damage but your armor blocks all of it. You still have {Health} health."
+                    : $"You receive {amount} damage but your armor can block {amount - finalAmount} of it, so you only receive {finalAmount}. You now have {Health} health.");
         else
             Console.WriteLine($"You receive {amount} damage and now have {Health} health.");
         
