@@ -19,7 +19,6 @@ ExportedObj/
 obj/
 *.svd
 *.userprefs
-*.csproj
 *.pidb
 *.suo
 *.sln

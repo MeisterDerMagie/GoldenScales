@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Graph" />
+      <Folder Include="Items\Armors\Neck" />
+      <Folder Include="Items\Armors\Ring" />
+    </ItemGroup>
+
+</Project>
