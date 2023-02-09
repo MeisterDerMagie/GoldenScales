@@ -48,7 +48,7 @@ public class Game
         //set seed
         RandomUtilities.SetSeed(intSeed);
         Seed = seed;
-        Console.WriteLine($"Seed is: {Seed}, intSeed: {intSeed}");
+        //Console.WriteLine($"Seed is: {Seed}, intSeed: {intSeed}");
 
         //generate dungeon
         dungeon = DungeonGenerator.Generate( 25, 15, intSeed);
