@@ -40,7 +40,7 @@ public static class InventoryUtilities
             return;
         }
         
-        Console.WriteLine($"{trader.Name} offers the following goods for sale:");
+        Console.WriteLine($"\n{trader.Name} offers the following goods for sale:");
         
         PrintInventoryItems(trader.Inventory, showGoldValue, "purchase price:");
     }
