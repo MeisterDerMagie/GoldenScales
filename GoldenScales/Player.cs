@@ -306,6 +306,7 @@ public class Player : IDamageable
     {
         Console.WriteLine("You died. The adventure is over.");
         Console.WriteLine($"Your score is: {Score.CalculateScore(false)}");
+        Console.WriteLine($"The seed for this dungeon layout was \"{Game.Singleton.Seed}\". Enter this at the beginning of a game to recreate the same dungeon (loot and enemies vary).");
         Game.Singleton.GameHasEnded = true;
     }
     #endregion

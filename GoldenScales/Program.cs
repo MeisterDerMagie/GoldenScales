@@ -12,35 +12,18 @@ internal static class Program
             Console.Clear();
             Console.WriteLine("A new adventure begins.");
 
-            int seed = GetSeed();
+            //seed
+            string seed;
+            bool wantsToEnterOwnSeed = ConsoleUtilities.InputBoolean("Do you want to input a custom seed?");
+            //if the player wants to enter a custom seed
+            if(wantsToEnterOwnSeed)
+                seed = ConsoleUtilities.InputString("Enter a seed for the procedural generation of the dungeon: ");
+            //if the player doesn't want to enter a custom seed, generate a random one
+            else
+                seed = new Random().Next(int.MinValue, int.MaxValue).ToString();
 
+            //start game
             var game = new Game(seed);
         }
-    }
-
-    private static int GetSeed()
-    {
-        bool wantsToEnterOwnSeed = ConsoleUtilities.InputBoolean("Do you want to input a custom seed?");
-        int seed;
-            
-        //if the player wants to enter a custom seed
-        if (wantsToEnterOwnSeed)
-        {
-            string userInput = ConsoleUtilities.InputString("Enter a seed for the procedural generation of the dungeon: ");
-            bool userEnteredAnInteger = int.TryParse(userInput, out int userInputAsInt);
-            var algo = SHA1.Create();
-            seed = userEnteredAnInteger ? userInputAsInt : BitConverter.ToInt32(algo.ComputeHash(Encoding.UTF8.GetBytes(userInput)));
-        }
-
-        //otherwise generate a random seed
-        else
-        {
-            seed = new Random().Next(int.MinValue, int.MaxValue);
-            RandomUtilities.SetSeed(seed);
-        }
-            
-        Console.WriteLine($"Seed is: {seed}");
-
-        return seed;
     }
 }

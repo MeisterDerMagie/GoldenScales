@@ -1,4 +1,6 @@
 ﻿//(c) copyright by Martin M. Klöckener
+using System.Security.Cryptography;
+using System.Text;
 using ConsoleAdventure.Items;
 using ConsoleAdventure.Items.Armors;
 using ConsoleAdventure.Items.Weapons;
@@ -17,6 +19,10 @@ public class Game
     public static Game Singleton;
     private Dungeon dungeon;
 
+    public string Seed;
+
+    private bool _restart;
+
     public int TotalDiscoveredRooms
     {
         get
@@ -31,13 +37,21 @@ public class Game
         }
     }
 
-    public Game(int seed)
+    public Game(string seed)
     {
         //singleton
         Singleton = this;
         
+        //convert seed
+        int intSeed = ConvertSeedToInt(seed);
+        
+        //set seed
+        RandomUtilities.SetSeed(intSeed);
+        Seed = seed;
+        Console.WriteLine($"Seed is: {Seed}, intSeed: {intSeed}");
+
         //generate dungeon
-        dungeon = DungeonGenerator.Generate( 25, 15, seed);
+        dungeon = DungeonGenerator.Generate( 25, 15, intSeed);
         
         //create player
         var player = new Player("Martin", 100, dungeon.StartingRoom);
@@ -60,38 +74,6 @@ public class Game
         ExplorationState = new Explore(dungeon, player, dungeonNavigation);
 
         StateMachine.SetState(ExplorationState);
-        
-        //DEBUG
-        /*
-        var plateBoots = new PlateBoots();
-        var plateBracers = new PlateBracers();
-        var plateGloves = new PlateGloves();
-        var plateGreaves = new PlateGreaves();
-        var plateHelmet = new PlateHelmet();
-        var plateTorso = new PlateTorso();
-        
-        player.AddToIventory(new Rapier());
-        player.AddToIventory(plateBoots);
-        player.AddToIventory(plateBracers);
-        player.AddToIventory(plateGloves);
-        player.AddToIventory(plateGreaves);
-        player.AddToIventory(plateHelmet);
-        player.AddToIventory(plateTorso);
-
-        player.Equip(plateBoots);
-        player.Equip(plateBracers);
-        player.Equip(plateGloves);
-        player.Equip(plateGreaves);
-        player.Equip(plateHelmet);
-        player.Equip(plateTorso);
-
-
-        for (int i = 0; i < 100; i += 2)
-        {
-            player.DealDamage(i);
-        }
-        */
-        //
 
         //Start Game Loop
         GameLoop();
@@ -103,9 +85,19 @@ public class Game
         {
             StateMachine.Tick();
         }
-        
+
+        if (_restart) return;
         bool startNewGame = ConsoleUtilities.InputBoolean("\nWould you like to try your luck again and descend into the dark depths?");
         if(!startNewGame) Environment.Exit(0);
+    }
+    
+    private static int ConvertSeedToInt(string userInput)
+    {
+        bool userEnteredAnInteger = int.TryParse(userInput, out int userInputAsInt);
+        var algo = SHA1.Create();
+        int seed = userEnteredAnInteger ? userInputAsInt : BitConverter.ToInt32(algo.ComputeHash(Encoding.UTF8.GetBytes(userInput)));
+
+        return seed;
     }
 
     private void ListAvailableCommands() => CommandUtilities.ListAvailableCommands(StateMachine.CurrentState.AvailableCommands);
@@ -118,11 +110,13 @@ public class Game
         var quitCommand = new Command("quit game (quit the game)", new List<string> { "quit game" }, Quit);
         var restartCommand = new Command("restart (start a new game)", new List<string> { "restart" }, Restart);
         var showHealthCommand = new Command("health (show your current health)", new List<string> { "health" }, () => Console.WriteLine($"Your current health is {Player.Singleton.Health}."));
+        var seedCommand = new Command("seed (show the seed of the current dungeon layout)", new List<string> { "seed" }, () => Console.WriteLine($"The seed for this dungeon layout is: \"{Seed}\". Enter it at the beginning of a new game to recreate the same layout of rooms (loot and enemies vary)."));
 
         gameCommands.Add(helpCommand);
         gameCommands.Add(quitCommand);
         gameCommands.Add(restartCommand);
         gameCommands.Add(showHealthCommand);
+        gameCommands.Add(seedCommand);
         
         GlobalCommands.AddRange(gameCommands);
     }
@@ -149,6 +143,10 @@ public class Game
     private void Restart()
     {
         bool restart = ConsoleUtilities.InputBoolean("Do you really want to start a new game? All progress will be lost!");
-        if (restart) GameHasEnded = true;
+        if (restart)
+        {
+            GameHasEnded = true;
+            _restart = true;
+        }
     }
 }

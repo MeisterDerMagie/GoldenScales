@@ -18,5 +18,6 @@ public class Lindworm : Enemy
         //show score
         Console.WriteLine("The adventure is over. You managed to defeat the Lindworm and took its place. Congratulations!");
         Console.WriteLine($"Your final score is: {Score.CalculateScore(true)}");
+        Console.WriteLine($"The seed for this dungeon layout was {Game.Singleton.Seed}. Enter this at the beginning of a game to recreate the same dungeon (loot and enemies vary).");
     }
 }
