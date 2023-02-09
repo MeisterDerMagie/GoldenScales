@@ -2,6 +2,7 @@
 
 using ConsoleAdventure.DataTypes;
 using ConsoleAdventure.Items;
+using ConsoleAdventure.Items.Armors;
 using ConsoleAdventure.Items.Consumables;
 using ConsoleAdventure.Items.Weapons;
 using ConsoleAdventure.Utilities;
@@ -10,7 +11,19 @@ namespace ConsoleAdventure;
 
 public class Player : IDamageable
 {
-    public Room CurrentRoom;
+    public Room CurrentRoom
+    {
+        get => _currentRoom;
+        set
+        {
+            PreviousRoom = _currentRoom;
+            _currentRoom = value;
+        }
+    }
+
+    private Room _currentRoom;
+
+    public Room PreviousRoom;
     public string Name { get; private set; }
     public int MaxHealth { get; private set; }
     public int Health
@@ -24,6 +37,8 @@ public class Player : IDamageable
         }
     }
     private int _health;
+    
+    public Weapon Weapon => EquippedItems[EquipSlot.Weapon] == null ? new Fists() : EquippedItems[EquipSlot.Weapon] as Weapon ;
 
     public int Gold { get; private set; }
     
@@ -164,7 +179,7 @@ public class Player : IDamageable
                 return false;
             }
             
-            bool playerWantsToUnequip = ConsoleUtilities.InputBoolean($"There already is an item equipped at the {item.EquipSlot.ToString()} slot. Do you want to unequip it and equip the new item instead?");
+            bool playerWantsToUnequip = ConsoleUtilities.InputBoolean($"There already is an item equipped at the {item.EquipSlot.ToString()} slot ({EquippedItems[item.EquipSlot].Name}). Do you want to unequip it and equip the new item ({item.Name}) instead?");
             if (!playerWantsToUnequip)
             {
                 Console.WriteLine("You decide not to equip the item.");
@@ -229,8 +244,8 @@ public class Player : IDamageable
     {
         var smallHealthPotion = new SmallHealthPotion();
         var mediumHealthPotion = new MediumHealthPotion();
-        var knife = new Knife(4, new Range<int>(3, 6), 0.05f, 2, 2);
-        var jacket = new Jacket(3, 2);
+        var knife = new Knife( new Range<int>(3, 3), new Range<int>(6, 6), new Range<float>(0.05f, 0.05f), new Range<float>(2f, 2f), new Range<float>(2f, 2f));
+        var jacket = new Jacket(new Range<int>(2, 2));
         
         AddToIventory(smallHealthPotion, true);
         AddToIventory(mediumHealthPotion, true);
@@ -245,8 +260,17 @@ public class Player : IDamageable
     #region Health
     public void DealDamage(int amount)
     {
-        Health -= amount;
-        Console.WriteLine($"You receive {amount} damage and now have {Health} health.");
+        if (amount == 0) return;
+        
+        //https://www.reddit.com/r/gamedesign/comments/oo099v/scaling_armor_values_in_a_leveled_dungeon_crawler/
+        int finalAmount = amount * Constants.ArmorCoefficient / (Constants.ArmorCoefficient + TotalArmorProtection);
+        Health -= finalAmount;
+
+        if (TotalArmorProtection > 0)
+            Console.WriteLine($"You receive {amount} damage but your armor can block {amount - finalAmount} ({100f/amount * (amount-finalAmount)}%) of it, so you only receive {finalAmount}. You now have {Health} health.");
+        else
+            Console.WriteLine($"You receive {amount} damage and now have {Health} health.");
+        
         CheckForDeath();
     }
 
@@ -281,6 +305,7 @@ public class Player : IDamageable
     private void Die()
     {
         Console.WriteLine("You died. The adventure is over.");
+        Console.WriteLine($"Your score is: {Score.CalculateScore(false)}");
         Game.Singleton.GameHasEnded = true;
     }
     #endregion

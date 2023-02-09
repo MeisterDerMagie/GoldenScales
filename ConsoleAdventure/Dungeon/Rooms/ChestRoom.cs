@@ -25,7 +25,7 @@ public class ChestRoom : Room
         //if the chest has already been opened, do nothing
         if (HasBeenLooted) return;
         
-        //heal player if they want to
+        //open the chest if the player wants to
         bool openNow = ConsoleUtilities.InputBoolean("Open the chest now?");
         if (openNow)
         {

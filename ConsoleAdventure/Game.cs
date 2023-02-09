@@ -1,5 +1,7 @@
 ﻿//(c) copyright by Martin M. Klöckener
 using ConsoleAdventure.Items;
+using ConsoleAdventure.Items.Armors;
+using ConsoleAdventure.Items.Weapons;
 using ConsoleAdventure.Utilities;
 
 namespace ConsoleAdventure;
@@ -13,6 +15,21 @@ public class Game
     public static Explore ExplorationState;
 
     public static Game Singleton;
+    private Dungeon dungeon;
+
+    public int TotalDiscoveredRooms
+    {
+        get
+        {
+            int discoveredRooms = 0;
+            foreach (Room room in dungeon.Rooms)
+            {
+                if (room.Discovered) discoveredRooms++;
+            }
+
+            return discoveredRooms;
+        }
+    }
 
     public Game(int seed)
     {
@@ -20,7 +37,7 @@ public class Game
         Singleton = this;
         
         //generate dungeon
-        Dungeon dungeon = DungeonGenerator.Generate( 25, 15, seed);
+        dungeon = DungeonGenerator.Generate( 25, 15, seed);
         
         //create player
         var player = new Player("Martin", 100, dungeon.StartingRoom);
@@ -44,11 +61,36 @@ public class Game
 
         StateMachine.SetState(ExplorationState);
         
+        //DEBUG
+        /*
+        var plateBoots = new PlateBoots();
+        var plateBracers = new PlateBracers();
+        var plateGloves = new PlateGloves();
+        var plateGreaves = new PlateGreaves();
+        var plateHelmet = new PlateHelmet();
+        var plateTorso = new PlateTorso();
         
-        //
-        Player.Singleton.AddToIventory(ItemFactory.GenerateRandomLootItem(15));
-        Player.Singleton.AddToIventory(ItemFactory.GenerateRandomLootItem(15));
-        Player.Singleton.AddToIventory(ItemFactory.GenerateRandomLootItem(15));
+        player.AddToIventory(new Rapier());
+        player.AddToIventory(plateBoots);
+        player.AddToIventory(plateBracers);
+        player.AddToIventory(plateGloves);
+        player.AddToIventory(plateGreaves);
+        player.AddToIventory(plateHelmet);
+        player.AddToIventory(plateTorso);
+
+        player.Equip(plateBoots);
+        player.Equip(plateBracers);
+        player.Equip(plateGloves);
+        player.Equip(plateGreaves);
+        player.Equip(plateHelmet);
+        player.Equip(plateTorso);
+
+
+        for (int i = 0; i < 100; i += 2)
+        {
+            player.DealDamage(i);
+        }
+        */
         //
 
         //Start Game Loop

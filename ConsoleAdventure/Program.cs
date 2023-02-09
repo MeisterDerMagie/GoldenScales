@@ -7,7 +7,6 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-
         while (true)
         {
             Console.Clear();
@@ -28,8 +27,9 @@ internal static class Program
         if (wantsToEnterOwnSeed)
         {
             string userInput = ConsoleUtilities.InputString("Enter a seed for the procedural generation of the dungeon: ");
+            bool userEnteredAnInteger = int.TryParse(userInput, out int userInputAsInt);
             var algo = SHA1.Create();
-            seed = BitConverter.ToInt32(algo.ComputeHash(Encoding.UTF8.GetBytes(userInput)));
+            seed = userEnteredAnInteger ? userInputAsInt : BitConverter.ToInt32(algo.ComputeHash(Encoding.UTF8.GetBytes(userInput)));
         }
 
         //otherwise generate a random seed

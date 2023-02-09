@@ -81,6 +81,32 @@ public static class RandomUtilities
             (list[k], list[n]) = (list[n], list[k]);
         }  
     }
+
+    public static float GetHighestValueOfDrawings(int drawings)
+    {
+        var random = new Random();
+        float highestValue = 0f;
+        for (int i = 0; i < drawings; i++)
+        {
+            float randomFloat = random.NextSingle();
+            if (randomFloat > highestValue) highestValue = randomFloat;
+        }
+
+        return highestValue;
+    }
+
+    public static float GetLowestValueOfDrawings(int drawings)
+    {
+        var random = new Random();
+        float lowestValue = 1f;
+        for (int i = 0; i < drawings; i++)
+        {
+            float randomFloat = random.NextSingle();
+            if (randomFloat < lowestValue) lowestValue = randomFloat;
+        }
+
+        return lowestValue;
+    }
 }
 
 public class ElementProbability<T>

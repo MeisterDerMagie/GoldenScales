@@ -1,5 +1,7 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using ConsoleAdventure.Items;
+
 namespace ConsoleAdventure.Enemies;
 
 public abstract class Enemy : IDamageable
@@ -18,15 +20,18 @@ public abstract class Enemy : IDamageable
         }
     }
 
+    public Weapon Weapon { get; }
+
     private int _health;
 
     public event Action OnEnemyDied;
 
-    public Enemy(string name, int maxHealth)
+    public Enemy(string name, int maxHealth, Weapon weapon)
     {
         Name = name;
         MaxHealth = maxHealth;
         Health = maxHealth;
+        Weapon = weapon;
     }
     
     public void DealDamage(int amount)

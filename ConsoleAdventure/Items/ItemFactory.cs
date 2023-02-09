@@ -1,7 +1,6 @@
 ﻿//(c) copyright by Martin M. Klöckener
 using System.Diagnostics.Contracts;
 using ConsoleAdventure.Items.Consumables;
-using ConsoleAdventure.Items.Valuables;
 
 namespace ConsoleAdventure.Items;
 
@@ -17,11 +16,14 @@ public static class ItemFactory
         {
             () => Valuable.GenerateRandomValuable(goldValue),
             () => HealthPotion.CreateHealthPotionFromGoldValue(goldValue),
-            //random weapon
-            //random armor
+            //random weapon(s)
+            () => Weapon.GenerateRandomWeapon(),
+            //random armor(s)
+            () => Armor.GenerateRandomArmor(),
+            () => Armor.GenerateRandomArmor()
         };
 
-        return GenerateRandomItem(goldValue, possibleItems);
+        return GenerateRandomItem(possibleItems);
     }
 
     [Pure]
@@ -30,14 +32,17 @@ public static class ItemFactory
         Func<Item>[] possibleItems =
         {
             () => HealthPotion.CreateHealthPotionFromGoldValue(goldValue),
-            //random weapon
-            //random armor
+            //random weapon(s)
+            () => Weapon.GenerateRandomWeapon(),
+            //random armor(s)
+            () => Armor.GenerateRandomArmor(),
+            () => Armor.GenerateRandomArmor()
         };
 
-        return GenerateRandomItem(goldValue, possibleItems);
+        return GenerateRandomItem(possibleItems);
     }
 
-    private static Item GenerateRandomItem(int goldValue, Func<Item>[] possibleItems)
+    private static Item GenerateRandomItem(Func<Item>[] possibleItems)
     {
         int randomIndex = rng.Next(possibleItems.Length);
         return possibleItems[randomIndex]();

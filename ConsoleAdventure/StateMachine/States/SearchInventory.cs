@@ -50,6 +50,7 @@ public class SearchInventory : IState
         var unequipCommand = new Command("unequip + item # (Unequip an item, e.g. \"unequip 2\")", new List<string>{"unequip"}, UnEquipItem);
         var consumeCommand = new Command("use/eat/drink  + item # (consume an item that's in your inventory, e.g. \"drink 2\")", new List<string> { "consume", "drink", "eat", "use" }, ConsumeItem);
         var statsCommand = new Command("stats + item # (show the detailed stats of an item)", new List<string> { "stats" }, DisplayItemStats);
+        var totalArmorCommand = new Command("total armor (show your total armor value)", new List<string> { "total armor" }, () => Console.WriteLine($"You currently have a total armor value of {Player.Singleton.TotalArmorProtection}."));
 
         AvailableCommands.Add(closeInventoryCommand);
         AvailableCommands.Add(listItemsCommand);
@@ -58,6 +59,7 @@ public class SearchInventory : IState
         AvailableCommands.Add(unequipCommand);
         AvailableCommands.Add(consumeCommand);
         AvailableCommands.Add(statsCommand);
+        AvailableCommands.Add(totalArmorCommand);
     }
 
     private void ExamineItem(List<string> userParameters)

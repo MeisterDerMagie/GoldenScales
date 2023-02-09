@@ -48,12 +48,16 @@ public static class DungeonGenerator
             GenerateBranch(randomRoom, branchLength, false, Constants.RoomDirectionProbabilitiesBranches);
         }
 
+        //print generated rooms to console
+        /*
         Console.WriteLine($"Generated {generatedRooms.ToString()} total rooms.");
         foreach (RoomType roomType in (RoomType[]) Enum.GetValues(typeof(RoomType)))
         {
             OutputAmountOfGeneratedRoomTypes(roomType);
         }
+        */
 
+        //return dungeon
         return dungeon;
     }
 

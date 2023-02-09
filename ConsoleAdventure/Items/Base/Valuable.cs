@@ -22,7 +22,6 @@ public abstract class Valuable : Item
             () => new Emerald(goldValue),
             () => new SilverRing(goldValue),
             () => new AncientCoin(goldValue),
-            
         };
 
         var rng = new Random();

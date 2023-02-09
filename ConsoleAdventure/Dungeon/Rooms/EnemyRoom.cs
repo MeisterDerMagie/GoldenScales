@@ -31,8 +31,14 @@ public class EnemyRoom : Room
     {
         base.Enter();
         
+        //if the enemy already has been defeated, do nothing
+        if (EnemyHasBeenDefeated) return;
+        
         //begin fight
-        var fight = new Fight(Player.Singleton, Enemy);
+        var fight = new Fight(Enemy);
         Game.StateMachine.SetState(fight);
+        
+        //set enemy to defeated (you currently can't flee from a fight, so either you defeat the enemy or die)
+        EnemyHasBeenDefeated = true;
     }
 }

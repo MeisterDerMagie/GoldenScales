@@ -6,8 +6,10 @@ public abstract class Equippable : Item
 {
     public EquipSlot EquipSlot { get; }
     public bool IsEquipped => CheckIfEquipped();
-    
-    protected Equippable(string name, int goldValue, EquipSlot slot) : base(name, goldValue)
+    public int Quality => CalculateQuality();
+    public override int GoldValue => CalculateGoldValue();
+
+    protected Equippable(string name, EquipSlot slot) : base(name)
     {
         EquipSlot = slot;
     }
@@ -21,4 +23,7 @@ public abstract class Equippable : Item
 
         return false;
     }
+
+    protected abstract int CalculateGoldValue();
+    protected abstract int CalculateQuality();
 }

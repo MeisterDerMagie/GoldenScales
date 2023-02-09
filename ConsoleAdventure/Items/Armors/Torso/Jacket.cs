@@ -1,9 +1,11 @@
 ﻿//(c) copyright by Martin M. Klöckener
-namespace ConsoleAdventure.Items;
+using ConsoleAdventure.DataTypes;
+
+namespace ConsoleAdventure.Items.Armors;
 
 public class Jacket : Armor
 {
-    public Jacket(int goldValue, int protection) : base("Jacket", goldValue, protection, EquipSlot.Torso)
+    public Jacket(Range<int> protectionRange) : base("Jacket", protectionRange, EquipSlot.Torso)
     {
     }
 

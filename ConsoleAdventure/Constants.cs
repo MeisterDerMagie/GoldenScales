@@ -8,10 +8,11 @@ namespace ConsoleAdventure;
 public static class Constants
 {
     #region Enemies
-    public const int SkeletonMaxHealth = 80;
-    public const int WizardMaxHealth = 45;
-    public const int SpiderMaxHealth = 60;
-    public const int MimicMaxHealth = 70;
+    public const int SkeletonMaxHealth = 50;
+    public const int WizardMaxHealth = 20;
+    public const int SpiderMaxHealth = 30;
+    public const int MimicMaxHealth = 35;
+    public const int LindwormMaxHealth = 100;
     #endregion
     
     #region Map
@@ -28,7 +29,8 @@ public static class Constants
     #endregion
     
     #region Damage
-    public static Range<int> TrapDamage = new(3, 10); 
+    public static Range<int> TrapDamage = new(3, 10);
+    public const int ArmorCoefficient = 25; //change this, to affect how much damage armor will negate. The lower the value, the more it will negate.
     #endregion
 
     #region Gold Values
@@ -36,8 +38,14 @@ public static class Constants
     public static Range<int> ChestValueRange => new(3, 20);
     public static Range<int> TreasureRoomGoldRange => new(5, 22);
     public static Range<int> TreasureRoomItemValueRange => new(3, 20);
-    public static Range<int> TraderItemAmount => new Range<int>(3, 8);
+    public static Range<int> TraderItemAmount => new Range<int>(2, 6);
     public static Range<int> TraderItemValue => new Range<int>(3, 16);
+    public static Range<int> EnemyLootGoldValueRange => new Range<int>(5, 22);
+    #endregion
+
+    #region Equipment Gold Values
+    public const float ArmorGoldPerProtection = 2f;
+    public const float WeaponGoldPerDps = 3f;
     #endregion
     
     #region Dungeon Generation
@@ -67,8 +75,8 @@ public static class Constants
     
     /*
     private const float ProbabilityEmptyRoom = 0f;
-    private const float ProbabilityEnemyRoom = 0f;
-    private const float ProbabilityTraderRoom = 1f;
+    private const float ProbabilityEnemyRoom = 1f;
+    private const float ProbabilityTraderRoom = 0f;
     private const float ProbabilityTreasureRoom = 0f;
     private const float ProbabilityChestRoom = 0f;
     private const float ProbabilityMimicRoom = 0f;
