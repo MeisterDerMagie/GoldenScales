@@ -38,7 +38,7 @@ public class Player : IDamageable
     }
     private int _health;
     
-    public Weapon Weapon => EquippedItems[EquipSlot.Weapon] == null ? new Fists() : EquippedItems[EquipSlot.Weapon] as Weapon ;
+    public Weapon EquippedWeapon => EquippedItems[EquipSlot.Weapon] == null ? new Fists() : EquippedItems[EquipSlot.Weapon] as Weapon ;
 
     public int Gold { get; private set; }
     
@@ -50,6 +50,9 @@ public class Player : IDamageable
 
     public Player(string name, int maxHealth, Room startingRoom)
     {
+        //pseudo singleton
+        Singleton = this;
+        
         CurrentRoom = startingRoom;
         Name = name;
         MaxHealth = maxHealth;
@@ -64,9 +67,6 @@ public class Player : IDamageable
         
         //give starting equipment
         GiveStartingEquipment();
-        
-        //pseudo singleton
-        Singleton = this;
     }
     
     #region Gold
@@ -254,6 +254,9 @@ public class Player : IDamageable
         
         Equip(knife);
         Equip(jacket);
+        
+        //sort inventory
+        InventoryUtilities.SortInventory(Inventory);
     }
     #endregion
 
@@ -309,7 +312,7 @@ public class Player : IDamageable
     {
         Console.WriteLine("You died. The adventure is over.");
         Console.WriteLine($"Your score is: {Score.CalculateScore(false)}");
-        Console.WriteLine($"The seed for this dungeon layout was \"{Game.Singleton.Seed}\". Enter this at the beginning of a game to recreate the same dungeon (loot and enemies vary).");
+        Console.WriteLine($"The seed for this dungeon layout was \"{Game.Singleton.Seed}\". Enter this at the beginning of a game to recreate the same dungeon (loot varies).");
         Game.Singleton.GameHasEnded = true;
     }
     #endregion

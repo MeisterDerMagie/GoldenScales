@@ -49,7 +49,7 @@ public class Fight : IState
         DateTime lastLoop = DateTime.Now;
         DateTime loopStart = DateTime.Now;
         int loopGoingForSeconds = 0;
-        while (_playerTimeSinceLastAttack.TotalSeconds < Player.Singleton.Weapon.AttackDuration)
+        while (_playerTimeSinceLastAttack.TotalSeconds < Player.Singleton.EquippedWeapon.AttackDuration)
         {
             //print dots (......) to show the player that there's something happening
             if (loopGoingForSeconds != (int)(loopStart - DateTime.Now).TotalSeconds)
@@ -76,8 +76,8 @@ public class Fight : IState
         }
 
         //if player timer is up, attack enemy
-        int attackDamage = Player.Singleton.Weapon.GetDamage();
-        Console.WriteLine($"You attack the {_enemy.Name} with your {Player.Singleton.Weapon.Name} for {attackDamage} damage. It now has {((_enemy.Health - attackDamage) < 0 ? 0 : (_enemy.Health - attackDamage))} health left.");
+        int attackDamage = Player.Singleton.EquippedWeapon.GetDamage();
+        Console.WriteLine($"You attack the {_enemy.Name} with your {Player.Singleton.EquippedWeapon.Name} for {attackDamage} damage. It now has {((_enemy.Health - attackDamage) < 0 ? 0 : (_enemy.Health - attackDamage))} health left.");
         _enemy.DealDamage(attackDamage);
         _playerTimeSinceLastAttack = TimeSpan.Zero;
 

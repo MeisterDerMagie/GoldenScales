@@ -63,7 +63,7 @@ public static class Constants
     private const float ProbabilityMainPathRoomWest = 0f;
     public static readonly List<ElementProbability<Direction>> RoomDirectionProbabilitiesMainBranch = new() { new ElementProbability<Direction>(Direction.North, ProbabilityMainPathRoomNorth), new ElementProbability<Direction>(Direction.East, ProbabilityMainPathRoomEast), new ElementProbability<Direction>(Direction.South, ProbabilityMainPathRoomSouth), new ElementProbability<Direction>(Direction.West, ProbabilityMainPathRoomWest) };
 
-    
+    /*
     private const float ProbabilityEmptyRoom = 0.15f;
     private const float ProbabilityEnemyRoom = 0.33f;
     private const float ProbabilityTraderRoom = 0.07f;
@@ -72,17 +72,17 @@ public static class Constants
     private const float ProbabilityMimicRoom = 0.02f;
     private const float ProbabilityTrapRoom = 0.075f;
     private const float ProbabilityHealingWellRoom = 0.075f;
+    */
     
-    /*
     private const float ProbabilityEmptyRoom = 0f;
-    private const float ProbabilityEnemyRoom = 1f;
-    private const float ProbabilityTraderRoom = 0f;
+    private const float ProbabilityEnemyRoom = 0f;
+    private const float ProbabilityTraderRoom = 1f;
     private const float ProbabilityTreasureRoom = 0f;
     private const float ProbabilityChestRoom = 0f;
     private const float ProbabilityMimicRoom = 0f;
     private const float ProbabilityTrapRoom = 0f;
     private const float ProbabilityHealingWellRoom = 0f;
-    */
+    
     
     public static readonly List<ElementProbability<RoomType>> RoomTypeProbabilities = new() { new ElementProbability<RoomType>(RoomType.ChestRoom, ProbabilityChestRoom), new ElementProbability<RoomType>(RoomType.EmptyRoom, ProbabilityEmptyRoom), new ElementProbability<RoomType>(RoomType.EnemyRoom, ProbabilityEnemyRoom), new ElementProbability<RoomType>(RoomType.TraderRoom, ProbabilityTraderRoom), new ElementProbability<RoomType>(RoomType.TreasureRoom, ProbabilityTreasureRoom), new ElementProbability<RoomType>(RoomType.TrapRoom, ProbabilityTrapRoom), new ElementProbability<RoomType>(RoomType.HealingWellRoom, ProbabilityHealingWellRoom), new ElementProbability<RoomType>(RoomType.MimicRoom, ProbabilityMimicRoom)};
 

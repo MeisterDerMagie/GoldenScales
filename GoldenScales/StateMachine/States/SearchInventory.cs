@@ -51,6 +51,8 @@ public class SearchInventory : IState
         var consumeCommand = new Command("use/eat/drink  + item # (consume an item that's in your inventory, e.g. \"drink 2\")", new List<string> { "consume", "drink", "eat", "use" }, ConsumeItem);
         var statsCommand = new Command("stats + item # (show the detailed stats of an item)", new List<string> { "stats" }, DisplayItemStats);
         var totalArmorCommand = new Command("total armor (show your total armor value)", new List<string> { "total armor" }, () => Console.WriteLine($"You currently have a total armor value of {Player.Singleton.TotalArmorProtection}."));
+        var totalGoldValueCommand = new Command("total gold value (show the total gold value of all your items)", new List<string>{"total gold value"}, () => Console.WriteLine($"The total gold value of all your items is: {InventoryUtilities.CalculateTotalGoldValueOfAllInventoryItems(Player.Singleton.Inventory)}"));
+        var sortInventoryCommand = new Command("sort (sort your inventory by item category and price)", new List<string> { "sort" }, () => { InventoryUtilities.SortInventory(Player.Singleton.Inventory); InventoryUtilities.PrintPlayerInventory(Player.Singleton); });
 
         AvailableCommands.Add(closeInventoryCommand);
         AvailableCommands.Add(listItemsCommand);
@@ -60,6 +62,8 @@ public class SearchInventory : IState
         AvailableCommands.Add(consumeCommand);
         AvailableCommands.Add(statsCommand);
         AvailableCommands.Add(totalArmorCommand);
+        AvailableCommands.Add(totalGoldValueCommand);
+        AvailableCommands.Add(sortInventoryCommand);
     }
 
     private void ExamineItem(List<string> userParameters)

@@ -1,5 +1,7 @@
 ﻿//(c) copyright by Martin M. Klöckener
 
+using ConsoleAdventure.Items.Valuables;
+
 namespace ConsoleAdventure.Rooms;
 
 public class EmptyRoom : Room
@@ -30,7 +32,7 @@ public class EmptyRoom : Room
         if (random > 0.02f) return;
         
         Console.WriteLine("At second glance, you notice a slight sparkle in the corner of the room. What is that? Half covered by dust, you find a valuable diamond! Who might have lost it here? What luck for you!");
-        Player.Singleton.AddGold(Constants.ValueRareDiamondInEmptyRoom);
+        Player.Singleton.AddToIventory(new Diamond());
 
         _foundDiamondInThisRoom = true;
     }

@@ -110,7 +110,7 @@ public class Game
         var quitCommand = new Command("quit game (quit the game)", new List<string> { "quit game" }, Quit);
         var restartCommand = new Command("restart (start a new game)", new List<string> { "restart" }, Restart);
         var showHealthCommand = new Command("health (show your current health)", new List<string> { "health" }, () => Console.WriteLine($"Your current health is {Player.Singleton.Health}."));
-        var seedCommand = new Command("seed (show the seed of the current dungeon layout)", new List<string> { "seed" }, () => Console.WriteLine($"The seed for this dungeon layout is: \"{Seed}\". Enter it at the beginning of a new game to recreate the same layout of rooms (loot and enemies vary)."));
+        var seedCommand = new Command("seed (show the seed of the current dungeon layout)", new List<string> { "seed" }, () => Console.WriteLine($"The seed for this dungeon layout is: \"{Seed}\". Enter it at the beginning of a new game to recreate the same layout of rooms (loot varies)."));
 
         gameCommands.Add(helpCommand);
         gameCommands.Add(quitCommand);

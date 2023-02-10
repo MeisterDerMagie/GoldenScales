@@ -1,4 +1,5 @@
 ﻿//(c) copyright by Martin M. Klöckener
+using System.Diagnostics.Contracts;
 using ConsoleAdventure.Items;
 using ConsoleAdventure.NPCs;
 
@@ -58,5 +59,64 @@ public static class InventoryUtilities
             string itemString = $"#{itemNumber}: {equipped}{item.Name} {goldValue} ({item.StatsShort})";
             Console.WriteLine(itemString);
         }
+    }
+
+    public static int CalculateTotalGoldValueOfAllInventoryItems(List<Item> inventory)
+    {
+        return inventory.Sum(item => item.GoldValue);
+    }
+    
+    //sorts the inventory in this order (each category internally sorted by gold value): Consumables --> Equipped Weapon --> Equipped Armor --> non-equipped Weapons --> non-equipped Armor --> Valuables
+    public static void SortInventory(List<Item> inventory)
+    {
+        var consumables = new List<Consumable>();
+        Weapon equippedWeapon = null;
+        var equippedArmor = new List<Armor>();
+        var nonEquippedWeapons = new List<Weapon>();
+        var nonEquippedArmor = new List<Armor>();
+        var valuables = new List<Valuable>();
+        var rest = new List<Item>(); //this should never have any items
+
+        //sort into categories
+        foreach (Item item in inventory)
+        {
+            if (item is Consumable consumable) consumables.Add(consumable);
+            else if (item is Weapon weapon)
+            {
+                if (weapon.IsEquipped) equippedWeapon = weapon;
+                else nonEquippedWeapons.Add(weapon);
+            }
+            else if (item is Armor armor)
+            {
+                if (armor.IsEquipped) equippedArmor.Add(armor);
+                else nonEquippedArmor.Add(armor);
+            }
+            else if(item is Valuable valuable) valuables.Add(valuable);
+            else
+            {
+                Console.WriteLine($"ERROR: Can't sort the item {item.Name} because it doesn't match any category.");
+                rest.Add(item);
+            }
+        }
+        
+        //sort categories by gold value
+        consumables = consumables.OrderBy(item => item.GoldValue).ToList();
+        equippedArmor = equippedArmor.OrderByDescending(item => item.GoldValue).ToList();
+        nonEquippedWeapons = nonEquippedWeapons.OrderByDescending(item => item.GoldValue).ToList();
+        nonEquippedArmor = nonEquippedArmor.OrderByDescending(item => item.GoldValue).ToList();
+        valuables = valuables.OrderByDescending(item => item.GoldValue).ToList();
+        rest = rest.OrderByDescending(item => item.GoldValue).ToList();
+        
+        //clear inventory
+        inventory.Clear();
+        
+        //re-add to inventory in order
+        inventory.AddRange(consumables);
+        if(equippedWeapon != null) inventory.Add(equippedWeapon);
+        inventory.AddRange(equippedArmor);
+        inventory.AddRange(nonEquippedWeapons);
+        inventory.AddRange(nonEquippedArmor);
+        inventory.AddRange(valuables);
+        inventory.AddRange(rest);
     }
 }

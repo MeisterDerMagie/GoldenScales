@@ -60,6 +60,9 @@ public class Trade : IState
         var leaveCommand = new Command("leave (stop trading and continue exploring the dungeon)", new List<string> { "leave" }, () => Game.StateMachine.SetState(Game.ExplorationState, false));
         var showGoldCommand = new Command("purse (take a look at your purse to see how much gold you own)", new List<string> { "purse", "gold" }, () => Player.Singleton.PrintPurse());
         var examineCommand = new Command("examine (examine an item in either your or the merchant's inventory.", new List<string> { "examine" }, ExamineItem);
+        var totalGoldValueCommand = new Command("total gold value (show the total gold value of all your items)", new List<string>{"total gold value"}, () => Console.WriteLine($"The total gold value of all your items is: {InventoryUtilities.CalculateTotalGoldValueOfAllInventoryItems(Player.Singleton.Inventory)}"));
+        var sortTraderInventoryCommand = new Command("sort trader (sort the inventory of the trader by item category and price)",new List<string> { "sort trader" }, () => { InventoryUtilities.SortInventory(_trader.Inventory); InventoryUtilities.PrintTraderInventory(_trader, true); });
+        var sortInventoryCommand = new Command("sort (sort your inventory by item category and price)", new List<string> { "sort" }, () => { InventoryUtilities.SortInventory(Player.Singleton.Inventory); InventoryUtilities.PrintPlayerInventoryTrading(Player.Singleton); });
         
         AvailableCommands.Add(buyItemCommand);
         AvailableCommands.Add(sellItemCommand);
@@ -68,6 +71,9 @@ public class Trade : IState
         AvailableCommands.Add(leaveCommand);
         AvailableCommands.Add(showGoldCommand);
         AvailableCommands.Add(examineCommand);
+        AvailableCommands.Add(totalGoldValueCommand);
+        AvailableCommands.Add(sortTraderInventoryCommand);
+        AvailableCommands.Add(sortInventoryCommand);
     }
     
     private void BuyItem(List<string> userParameters)
