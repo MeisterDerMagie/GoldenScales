@@ -8,6 +8,8 @@
         <SelfContained>true</SelfContained>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PublishReadyToRun>true</PublishReadyToRun>
+
+        <ApplicationIcon>Images\GoldenScales_icon.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
